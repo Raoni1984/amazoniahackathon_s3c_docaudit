@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Streamlit
+.streamlit/
+
+# Secret / Local configs
+.secrets*
+*.key
+
+# Participant package data (Rule 1 of Hackathon: do not redistribute sensitive data)
+participant-package/
+
+# Outputs
+output/
+results/
+temp/
