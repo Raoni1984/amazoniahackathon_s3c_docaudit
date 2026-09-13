@@ -94,6 +94,7 @@ def index_dashboard(dossie: Optional[str] = None):
     
     total_docs = sum(o.get("documents_count", 0) for o in all_occs)
     total_discs = sum(o.get("discrepancies_count", 0) for o in all_occs)
+    municipalities = sorted(list(set([o.get("municipality", "").strip() for o in all_occs if o.get("municipality")])))
     
     # Generate cryptographic Merkle Root
     merkle_root = selected_occ.get("merkle_root_hash") if selected_occ else ""
@@ -344,9 +345,6 @@ def index_dashboard(dossie: Optional[str] = None):
         <h1>🛡️ SC3 DocAudit</h1>
         <p>Selo Criptográfico de Cadeia de Custódia &bull; Auditoria Documental Forense <span class="version-tag">Versão 1.2.4 &bull; 13/09/2026</span></p>
       </div>
-      <div>
-        <span class="badge badge-ok" style="font-size:12px;padding:6px 12px;">✅ 100% OPERACIONAL</span>
-      </div>
     </header>
 
 
@@ -356,15 +354,25 @@ def index_dashboard(dossie: Optional[str] = None):
       <aside class="panel">
         <div class="panel-title">
           <span>📋 Ocorrências</span>
-          <span style="font-size:12px;color:var(--text-muted);">{len(all_occs)} registros</span>
+          <span id="occ-count" style="font-size:12px;color:var(--text-muted);">{len(all_occs)} registros</span>
         </div>
-        <div>
-          {''.join([f'''<a href="/?dossie={o['id']}" class="occ-item {'active' if o['id'] == selected_id else ''}">
+
+        <div style="margin-bottom: 14px;">
+          <label for="muni-filter" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">
+            📍 Filtrar Município:
+          </label>
+          <select id="muni-filter" onchange="filterMunicipalities(this.value)" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1.5px solid var(--border-color); font-size: 13px; font-weight: 600; color: var(--text-dark); background: #FFFFFF; cursor: pointer; outline: none;">
+            <option value="ALL">Todos os Municípios ({len(all_occs)})</option>
+            {''.join([f'<option value="{m}">{m}</option>' for m in municipalities])}
+          </select>
+        </div>
+
+        <div id="occ-list">
+          {''.join([f'''<a href="/?dossie={o['id']}" data-muni="{o.get('municipality', '')}" class="occ-item {'active' if o['id'] == selected_id else ''}">
             <div class="occ-id">{o['id']}</div>
             <div class="occ-muni">{o.get('municipality', 'Amazônia')}</div>
             <div class="occ-meta">
-              <span>{o.get('documents_count', 0)} auto(s)</span>
-              <span class="badge badge-ok">CONCILIADO</span>
+              <span>{o.get('documents_count', 0)} auto(s) anexado(s)</span>
             </div>
           </a>''' for o in all_occs])}
         </div>
@@ -447,6 +455,22 @@ def index_dashboard(dossie: Optional[str] = None):
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    }}
+
+    function filterMunicipalities(selected) {{
+      const items = document.querySelectorAll('#occ-list .occ-item');
+      let count = 0;
+      items.forEach(item => {{
+        const muni = item.getAttribute('data-muni');
+        if (selected === 'ALL' || muni === selected) {{
+          item.style.display = 'block';
+          count++;
+        }} else {{
+          item.style.display = 'none';
+        }}
+      }});
+      const countEl = document.getElementById('occ-count');
+      if (countEl) countEl.innerText = count + ' registros';
     }}
   </script>
 </body>
