@@ -6,7 +6,13 @@
 [![Architecture](https://img.shields.io/badge/Architecture-Occurrence--First%20%7C%20Mobile--First-purple.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Cost](https://img.shields.io/badge/Cost%20per%20Doc-%240.00%20(Local%20Offline)-brightgreen.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Privacy](https://img.shields.io/badge/LGPD-100%25%20Compliant%20by%20Design-0284c7.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
-[![Tests](https://img.shields.io/badge/Tests-13%2F13%20Passing-success.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
+[![Tests](https://img.shields.io/badge/Tests-14%2F14%20Passing-success.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
+
+---
+
+<div align="center">
+  <h3>🌐 <b>Language / Idioma:</b> <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentacao-em-portugues-pt-br">🇧🇷 Documentação em Português (PT-BR)</a></h3>
+</div>
 
 ---
 
@@ -152,7 +158,7 @@ pip install -r requirements.txt
 ```bash
 pytest sc3_docaudit/tests/
 ```
-*Executes all 13 unit tests covering OpenCV preprocessing, zero-shot entity extraction, confidence calibration, adversarial robustness, and SC3 Merkle seals.*
+*Executes all 14 unit and integration tests covering OpenCV preprocessing, zero-shot entity extraction, confidence calibration, adversarial robustness, and SC3 Merkle seals.*
 
 #### 3. Launch Web Application
 ```bash
@@ -161,6 +167,9 @@ streamlit run app.py
 *Access the local dashboard at `http://localhost:8501` to search occurrences, inspect dossiers, review deskewed images, listen to field voice notes, and register new notices via camera.*
 
 ---
+
+<p align="right"><a href="#️-sc3-docaudit">⬆️ Back to Top</a> &nbsp;|&nbsp; <a href="#documentacao-em-portugues-pt-br">🇧🇷 Ir para a Documentação em Português</a></p>
+
 ---
 
 ## Documentação em Português (PT-BR)
@@ -200,3 +209,7 @@ O sistema adota o paradigma **Centrado na Ocorrência**: cada documento de fisca
 6. **Conformidade com a Regra 4 & LGPD:**
    - **Custo por Documento: R$ 0,00 ($0.00)** — Zero consumo de APIs pagas em nuvem.
    - Privacidade total: Dados sensíveis permanecem no órgão ambiental.
+
+---
+
+<p align="right"><a href="#️-sc3-docaudit">⬆️ Voltar ao Topo</a> &nbsp;|&nbsp; <a href="#english-documentation">🇺🇸 Go to English Documentation</a></p>
