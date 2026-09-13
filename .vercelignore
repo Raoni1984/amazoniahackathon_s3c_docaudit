@@ -1,0 +1,9 @@
+.git
+.github
+sc3_docaudit/tests
+sample_docs
+participant-package
+.venv
+venv
+__pycache__
+*.pyc
