@@ -117,6 +117,18 @@ streamlit run app.py
 python cli.py --input participant-package/challenges-1-2/altamira/documents/ --output results/
 ```
 
+#### 5. Court & Forensic Evidence Verification (CPP Art. 158-A to 158-F)
+Judicial experts and judges can verify the cryptographic chain of custody of any exported `.sc3` file using universal operating system tools without proprietary dependencies:
+
+* **Windows (PowerShell / Command Prompt):**
+  ```powershell
+  certutil -hashfile Dossie_OC-2026-ALT-01.sc3 SHA256
+  ```
+* **Linux / macOS:**
+  ```bash
+  sha256sum Dossie_OC-2026-ALT-01.sc3
+  ```
+
 ---
 
 <p align="right"><a href="#️-sc3-docaudit">⬆️ Back to Top</a> &nbsp;</a></p>
@@ -182,6 +194,19 @@ streamlit run app.py
 ```bash
 python cli.py --input participant-package/challenges-1-2/altamira/documents/ --output results/
 ```
+
+#### 5. Validação Forense e Pericial da Prova pelo Tribunal (Arts. 158-A a 158-F do CPP)
+O Juiz, Promotor ou Perito Judicial pode auditar de forma 100% independente a integridade probatória do pacote `.sc3` diretamente no terminal do Tribunal, sem depender de softwares proprietários:
+
+* **No Windows (PowerShell / CMD):**
+  ```powershell
+  certutil -hashfile Dossie_OC-2026-ALT-01.sc3 SHA256
+  ```
+* **No Linux / macOS:**
+  ```bash
+  sha256sum Dossie_OC-2026-ALT-01.sc3
+  ```
+* O hash retornado de 64 caracteres deve coincidir rigorosamente com a Raiz de Merkle lavrada na certidão do PJe/Laudo Pericial. Qualquer alteração em dados geográficos, nomes ou valores quebra a integridade matemática da prova.
 
 ---
 
