@@ -37,7 +37,15 @@ from sc3_docaudit.core.database import OccurrenceDatabase, DB_PATH
 try:
     from api.index import app, app as application, app as handler
 except Exception:
-    app = None
+    try:
+        from fastapi import FastAPI
+        app = FastAPI()
+        application = app
+        handler = app
+    except Exception:
+        app = None
+        application = None
+        handler = None
 
 from sc3_docaudit.core.gps_parser import GPSParser
 
