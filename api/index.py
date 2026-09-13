@@ -55,8 +55,6 @@ def get_dossier(occ_id: str):
     occ = OccurrenceDatabase.get_occurrence_by_id(occ_id)
     if not occ:
         raise HTTPException(status_code=404, detail=f"Occurrence {occ_id} not found")
-    docs = OccurrenceDatabase.get_documents_by_occurrence(occ_id)
-    occ["documents"] = docs
     return occ
 
 
@@ -66,8 +64,6 @@ def download_sc3_container(occ_id: str):
     occ = OccurrenceDatabase.get_occurrence_by_id(occ_id)
     if not occ:
         raise HTTPException(status_code=404, detail=f"Occurrence {occ_id} not found")
-    docs = OccurrenceDatabase.get_documents_by_occurrence(occ_id)
-    occ["documents"] = docs
     
     # Generate cryptographic seal
     seal = CryptoSealSC3.generate_seal(
@@ -94,7 +90,7 @@ def index_dashboard(dossie: Optional[str] = None):
     all_occs = OccurrenceDatabase.get_all_occurrences()
     selected_id = dossie if (dossie and any(o["id"] == dossie for o in all_occs)) else (all_occs[0]["id"] if all_occs else "")
     selected_occ = OccurrenceDatabase.get_occurrence_by_id(selected_id) if selected_id else None
-    selected_docs = OccurrenceDatabase.get_documents_by_occurrence(selected_id) if selected_id else []
+    selected_docs = selected_occ.get("documents", []) if selected_occ else []
     
     total_docs = sum(o.get("documents_count", 0) for o in all_occs)
     total_discs = sum(o.get("discrepancies_count", 0) for o in all_occs)
