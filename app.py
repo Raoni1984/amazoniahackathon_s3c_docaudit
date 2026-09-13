@@ -24,7 +24,6 @@ if CURRENT_DIR not in sys.path:
 
 # pyrefly: ignore [missing-import]
 import streamlit as st  # type: ignore
-import streamlit.components.v1 as components
 from sc3_docaudit.core.image_preprocessing import DocumentPreprocessor
 from sc3_docaudit.core.extractor_engine import ExtractorEngine
 from sc3_docaudit.core.confidence_evaluator import ConfidenceEvaluator
