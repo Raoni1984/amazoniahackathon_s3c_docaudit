@@ -818,7 +818,7 @@ if "dossie" in query_params or "occ" in query_params or "id" in query_params:
     occ_found = OccurrenceDatabase.get_occurrence_by_id(requested_id)
     if occ_found:
         st.session_state["selected_occ_id"] = requested_id
-        st.session_state["current_page"] = "🔬 Inspecionar Dossiê"
+        st.session_state["current_page"] = "📂 Dossiê da Ocorrência"
 
 # Initialize session state caches
 if "current_page" not in st.session_state:
