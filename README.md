@@ -131,6 +131,36 @@ Judicial experts and judges can verify the cryptographic chain of custody of any
 
 ---
 
+### 🧠 Algorithms, Computer Vision & Confidence Calibration Metrics
+
+The **SC3 DocAudit** platform utilizes a multi-stage deterministic and neural pipeline engineered specifically for degraded field documents:
+
+#### 1. Computer Vision & Preprocessing Pipeline (`sc3_docaudit/core/image_preprocessing.py`)
+* **Hough Line Transform & Minimum Area Bounding Box (`cv2.minAreaRect`, `cv2.HoughLinesP`)**: Detects document orientation and performs affine transformations to deskew rotated and distorted photos.
+* **CLAHE (Contrast Limited Adaptive Histogram Equalization)**: Removes harsh shadows and evens out non-uniform lighting caused by sunlight and dense forest canopies.
+* **Otsu's Global Thresholding & Adaptive Gaussian Binarization (`cv2.adaptiveThreshold`)**: Segments faint carbon copy prints, thermal paper, and weathered documents from background noise.
+* **Bilateral & Gaussian Filtering**: Suppresses camera sensor noise while strictly preserving handwritten and typed stroke edges.
+
+#### 2. Layout-Agnostic Extraction Engine (`sc3_docaudit/core/extractor_engine.py`)
+* **Deep Neural Character Recognition (CRNN / EasyOCR / PyTesseract)**: Extracts character-level probabilities ($p \in [0.0, 1.0]$) with fine-grained spatial bounding boxes.
+* **Deterministic Semantic Regex & Lexical Parsers**: Extracts structured entities (CAR codes, GPS coordinates, legal references such as *Lei Federal nº 9.605/1998* and *Decreto nº 6.514/2008*, party names, CPF/CNPJ, and fine amounts).
+
+#### 3. Multi-Tier Confidence Calibration ($0.0 \le \text{Confidence} \le 1.0$)
+The confidence score is not an arbitrary heuristic. It is computed through a multi-factor mathematical formulation bounded in $[0.0, 1.0]$:
+
+$$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OCR}} + w_2 \cdot V_{\text{Syntax}} + w_3 \cdot A_{\text{Spatial}}\big)\Big)$$
+
+* **$P_{\text{OCR}}$ (OCR Bayesian Probability)**: Native character probability returned by the neural OCR model.
+* **$V_{\text{Syntax}}$ (Syntactic Validation)**: Strict regular expression mask verification (e.g., official CAR format `UF-1500602-...` scores $0.95$, valid date format `DD/MM/YYYY` scores $0.90$).
+* **$A_{\text{Spatial}}$ (Geographic Bounding Box Consistency)**: Coordinates located inside the Legal Amazon bounding box (Lat $-15^\circ$ to $+5^\circ$, Lon $-74^\circ$ to $-44^\circ$) receive positive spatial reinforcement.
+* **Anti-Hallucination Threshold**: When composite confidence falls below the reliability threshold ($< 0.35$), the field is explicitly output as `null` with low confidence, adhering strictly to `schema.md` zero-hallucination rules.
+
+#### 4. Cryptographic Reconciliation & Merkle Proofs (`sc3_docaudit/core/crypto_seal.py` & `reconciler.py`)
+* **Binary Merkle Tree Construction (SHA-256)**: Computes deterministic leaf hashes from physical images, audio notes, field text, and extracted JSONs, creating a single immutable 64-character Root Hash.
+* **Levenshtein Distance & Haversine Geodesic Distance**: Used in `reconciler.py` to cross-audit differences between field GPS points and paper notices (e.g. area $> 10\%$ discrepancy, party name differences).
+
+---
+
 <p align="right"><a href="#️-sc3-docaudit">⬆️ Back to Top</a> &nbsp;</a></p>
 
 ---
@@ -207,6 +237,36 @@ O Juiz, Promotor ou Perito Judicial pode auditar de forma 100% independente a in
   sha256sum Dossie_OC-2026-ALT-01.sc3
   ```
 * O hash retornado de 64 caracteres deve coincidir rigorosamente com a Raiz de Merkle lavrada na certidão do PJe/Laudo Pericial. Qualquer alteração em dados geográficos, nomes ou valores quebra a integridade matemática da prova.
+
+---
+
+### 🧠 Algoritmos Utilizados, Pipeline de Visão e Métricas de Confiança
+
+A plataforma **SC3 DocAudit** combina visão computacional clássica, OCR neural profundo e análise semântica determinística:
+
+#### 1. Pipeline de Visão Computacional e Pré-processamento (`sc3_docaudit/core/image_preprocessing.py`)
+* **Transformada de Hough e Retângulo de Área Mínima (`cv2.minAreaRect`, `cv2.HoughLinesP`)**: Detecta o ângulo de rotação da folha fotografada e aplica transformações afins para correção automática de inclinação (*deskew*).
+* **CLAHE (Contrast Limited Adaptive Histogram Equalization)**: Equalização adaptativa de histograma para eliminação de sombras e iluminação desuniforme da copa da floresta.
+* **Limiarização de Otsu e Binarização Gaussiana Adaptativa (`cv2.adaptiveThreshold`)**: Segmenta traços finos de papel carbono, papel térmico e formulários físicos desgastados.
+* **Filtro Bilateral e Gaussiano**: Reduz ruídos de sensor da câmera preservando estritamente as bordas de texto manuscrito e datilografado.
+
+#### 2. Motor de Extração Semântica Agnóstico a Layouts (`sc3_docaudit/core/extractor_engine.py`)
+* **OCR Neural Profundo (CRNN / EasyOCR / PyTesseract)**: Extração de caracteres com cálculo de probabilidade bayesiana ($p \in [0.0, 1.0]$) por caixa delimitadora (*bounding box*).
+* **Parsers Semânticos e Expressões Regulares Ancoradas**: Extração de entidades estruturadas (Código CAR, coordenadas geográficas, enquadramentos legais como *Lei Federal 9.605/1998* e *Decreto Federal 6.514/2008*, autuados, CPFs/CNPJs e valores de multa).
+
+#### 3. Calibração Multidimensional de Confiança ($0.0 \le \text{Confidence} \le 1.0$)
+O score de confiança não é uma estimativa genérica, mas uma função matemática delimitada no intervalo $[0.0, 1.0]$:
+
+$$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OCR}} + w_2 \cdot V_{\text{Sintaxe}} + w_3 \cdot A_{\text{Espacial}}\big)\Big)$$
+
+* **$P_{\text{OCR}}$ (Probabilidade Bayesiana do OCR)**: Score estatístico nativo da rede neural de reconhecimento óptico.
+* **$V_{\text{Sintaxe}}$ (Validação Sintática e Máscaras)**: Verificação estrita de formato (ex.: máscara oficial de CAR `PA-1500602-...` pontua $0.95$; data válida `DD/MM/AAAA` pontua $0.90$).
+* **$A_{\text{Espacial}}$ (Consistência Territorial)**: Coordenadas geográficas situadas dentro dos limites da Amazônia Legal (Lat $-15^\circ$ a $+5^\circ$, Long $-74^\circ$ a $-44^\circ$) recebem reforço positivo.
+* **Política de Anti-Alucinação**: Quando a confiança combinada for inferior ao limiar mínimo de confiabilidade ($< 0.35$), o campo é explicitamente marcado como `null` com confiança condizente, cumprindo 100% a diretriz de não-alucinação do `schema.md`.
+
+#### 4. Reconciliação Forense e Provas Merkle (`sc3_docaudit/core/crypto_seal.py` e `reconciler.py`)
+* **Árvore de Merkle Binária (SHA-256)**: Amarra matematicamente as imagens originais, áudios, anotações e JSONs em um único Hash Raiz imutável de 64 caracteres.
+* **Distância de Levenshtein e Distância Geodésica de Haversine**: Utilizadas no `reconciler.py` para detecção de divergências entre logs de GPS de campo e autos de papel (ex.: divergência de área $> 10\%$, divergência de nomes de autuados).
 
 ---
 
