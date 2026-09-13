@@ -794,6 +794,15 @@ OccurrenceDatabase.seed_if_empty(package_dir)
 def get_engine():
     return ExtractorEngine(use_gpu=False)
 
+# Handle query parameters for deep linking (e.g. ?dossie=OC-2026-ALT-01)
+query_params = st.query_params
+if "dossie" in query_params or "occ" in query_params or "id" in query_params:
+    requested_id = query_params.get("dossie") or query_params.get("occ") or query_params.get("id")
+    occ_found = OccurrenceDatabase.get_occurrence_by_id(requested_id)
+    if occ_found:
+        st.session_state["selected_occ_id"] = requested_id
+        st.session_state["current_page"] = "🔬 Inspecionar Dossiê"
+
 # Initialize session state caches
 if "current_page" not in st.session_state:
     st.session_state["current_page"] = "🏠 Início"
@@ -1786,12 +1795,21 @@ elif current_page == "📂 Dossiê da Ocorrência":
                             st.error("Formato de coordenadas não reconhecido. Por favor informe em graus decimais ou GMS.")
 
         st.markdown("<hr style='margin:20px 0 16px;border:none;border-bottom:1px solid #DCE3E8;'>", unsafe_allow_html=True)
-        # Action Bar: Download Dossier (.json) & Live Cryptographic Seal Validation
-        col_dl, col_val = st.columns([1.2, 1.2])
-        with col_dl:
-            full_dossier_json = json.dumps(selected_record, indent=2, ensure_ascii=False)
+        # Action Bar: Download Dossier (.sc3 / .json) & Live Cryptographic Seal Validation
+        col_dl_sc3, col_dl_json, col_val = st.columns([1.3, 1.1, 1.4])
+        full_dossier_json = json.dumps(selected_record, indent=2, ensure_ascii=False)
+        with col_dl_sc3:
             st.download_button(
-                label=f"⬇️ Baixar Dossiê Forense Completo ({selected_record['id']})",
+                label=f"📦 Baixar Pacote Criptográfico (.sc3)",
+                data=full_dossier_json,
+                file_name=f"Dossie_{selected_record['id']}.sc3",
+                mime="application/octet-stream",
+                use_container_width=True,
+                help="Download do container pericial estruturado e assinado para auditoria forense offline."
+            )
+        with col_dl_json:
+            st.download_button(
+                label=f"📄 Baixar JSON",
                 data=full_dossier_json,
                 file_name=f"Dossie_{selected_record['id']}.json",
                 mime="application/json",
@@ -1802,7 +1820,7 @@ elif current_page == "📂 Dossiê da Ocorrência":
             if val_state_key not in st.session_state:
                 st.session_state[val_state_key] = False
 
-            btn_label = "🔒 Ocultar Validação do Selo" if st.session_state[val_state_key] else "🔍 Validar Selo Criptográfico SC3"
+            btn_label = "🔒 Ocultar Validação" if st.session_state[val_state_key] else "🔍 Validar Selo SC3 (Arts. 158 CPP)"
             if st.button(btn_label, key=f"btn_toggle_seal_val_{selected_record['id']}", use_container_width=True, type="primary" if not st.session_state[val_state_key] else "secondary"):
                 st.session_state[val_state_key] = not st.session_state[val_state_key]
                 st.rerun()
@@ -1920,6 +1938,14 @@ elif current_page == "📂 Dossiê da Ocorrência":
                     st.markdown("**🎙️ Hashes dos Áudios:**")
                     for ah in audio_leaf_hashes:
                         st.markdown(f"- `{ah['name']}` ({ah['size_kb']} KB): `SHA-256: {ah['hash']}`")
+
+                st.markdown("<div style='margin-top:14px;'></div>", unsafe_allow_html=True)
+                st.text_input(
+                    "🔗 Link Direto de Acesso Pericial para Laudo / PJe (Clique e Copie):",
+                    value=f"https://amazoniahackathons3cdocaudit-nmluix5bwjqrtjt4sfysv2.streamlit.app/?dossie={selected_record['id']}",
+                    key=f"txt_link_pericial_{selected_record['id']}",
+                    help="Copie e cole este link diretamente em laudos periciais ou petições judiciais para auditoria direta."
+                )
 
 
         # Smooth Scroll Execution if triggered by 'Corrigir agora'
