@@ -28,9 +28,12 @@ app = FastAPI(
     version="1.2.4"
 )
 
-# Initialize database and seed if empty
-OccurrenceDatabase.init_db()
-OccurrenceDatabase.seed_if_empty()
+# Initialize database safely for serverless environments
+try:
+    OccurrenceDatabase.init_db()
+    OccurrenceDatabase.seed_if_empty()
+except Exception as e:
+    print(f"[WARN] Database init: {e}")
 
 
 @app.get("/api/health")

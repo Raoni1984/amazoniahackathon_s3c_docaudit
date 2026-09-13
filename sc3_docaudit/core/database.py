@@ -11,9 +11,18 @@ import datetime
 import hashlib
 from typing import List, Dict, Any, Optional
 
-DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
-os.makedirs(DB_DIR, exist_ok=True)
-DB_PATH = os.path.join(DB_DIR, "occurrences.db")
+# Detect serverless read-only filesystem (e.g. Vercel, AWS Lambda)
+if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    DB_DIR = "/tmp"
+    DB_PATH = "/tmp/occurrences.db"
+else:
+    DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
+    try:
+        os.makedirs(DB_DIR, exist_ok=True)
+        DB_PATH = os.path.join(DB_DIR, "occurrences.db")
+    except Exception:
+        DB_DIR = "/tmp"
+        DB_PATH = "/tmp/occurrences.db"
 
 DOC_TYPE_LABELS = {
     "finding_notice": "Auto de Constatação",
