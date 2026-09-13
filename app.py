@@ -841,8 +841,8 @@ header_html = f"""<div class="top-header-bar">
       <div style="margin:0;font-size:24px;font-weight:800;color:#FFFFFF;letter-spacing:0.5px;line-height:1.2;">
         SC3 DocAudit
       </div>
-      <div class="top-header-subtitle" style="margin:4px 0 0;font-size:14px;font-weight:500;color:rgba(255,255,255,0.92);letter-spacing:0.2px;">
-        Selo Criptográfico de Cadeia de Custódia &bull; Auditoria Documental Forense
+      <div class="top-header-subtitle" style="margin:4px 0 0;font-size:13.5px;font-weight:500;color:rgba(255,255,255,0.92);letter-spacing:0.2px;">
+        Selo Criptográfico de Cadeia de Custódia &bull; Auditoria Documental Forense &bull; <span style="background:rgba(255,255,255,0.20);padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:0.3px;">Versão 1.2.4 &bull; 13/09/2026</span>
       </div>
     </div>
   </div>
