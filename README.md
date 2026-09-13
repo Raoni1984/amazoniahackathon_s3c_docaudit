@@ -1,3 +1,14 @@
+---
+title: SC3 DocAudit - AmazoniaHack 2026
+emoji: 🛡️
+colorFrom: green
+colorTo: emerald
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
+
 # 🛡️ SC3 DocAudit
 ### Intelligent Extraction, Uncertainty Calibration, and Cryptographic Chain of Custody for Environmental Enforcement in the Amazon
 
