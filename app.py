@@ -99,6 +99,24 @@ st.markdown("""
         position: absolute !important;
     }
 
+    /* Hide Streamlit's default 'Press Enter to apply' / Input Instructions */
+    div[data-testid="InputInstructions"],
+    [data-testid="InputInstructions"],
+    small[data-testid="InputInstructions"],
+    .stTextInput [data-testid="InputInstructions"],
+    .stTextArea [data-testid="InputInstructions"],
+    .stNumberInput [data-testid="InputInstructions"],
+    .stDateInput [data-testid="InputInstructions"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        font-size: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
     /* Accordion Expanders */
     [data-testid="stExpander"] {
         border: 1.5px solid #DCE3E8 !important;
