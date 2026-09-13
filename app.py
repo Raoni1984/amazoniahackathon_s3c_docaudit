@@ -35,10 +35,12 @@ from sc3_docaudit.core.database import OccurrenceDatabase, DB_PATH
 
 # Vercel Serverless entrypoint compatibility
 try:
-    from api.index import app, app as application, app as handler
+    # pyrefly: ignore [missing-import]
+    from api.index import app, app as application, app as handler  # type: ignore
 except Exception:
     try:
-        from fastapi import FastAPI
+        # pyrefly: ignore [missing-import]
+        from fastapi import FastAPI  # type: ignore
         app = FastAPI()
         application = app
         handler = app
