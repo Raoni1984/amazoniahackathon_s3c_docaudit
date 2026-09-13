@@ -8,3 +8,5 @@ pypdfium2>=4.20.0
 geopy>=2.4.0
 shapely>=2.0.0
 pytest>=7.4.0
+fastapi>=0.100.0
+uvicorn>=0.23.0
