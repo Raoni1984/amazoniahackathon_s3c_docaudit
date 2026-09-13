@@ -1925,7 +1925,7 @@ elif current_page == "📂 Dossiê da Ocorrência":
 
         # Smooth Scroll Execution if triggered by 'Corrigir agora'
         if st.session_state.get("scroll_to_correction"):
-            components.html("""
+            st.components.v1.html("""
             <script>
                 setTimeout(function() {
                     try {
