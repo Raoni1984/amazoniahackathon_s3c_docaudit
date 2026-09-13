@@ -32,6 +32,13 @@ import importlib
 import sc3_docaudit.core.database
 importlib.reload(sc3_docaudit.core.database)
 from sc3_docaudit.core.database import OccurrenceDatabase, DB_PATH
+
+# Vercel Serverless entrypoint compatibility
+try:
+    from api.index import app, app as application, app as handler
+except Exception:
+    app = None
+
 from sc3_docaudit.core.gps_parser import GPSParser
 
 LOGO_PATH = os.path.join(CURRENT_DIR, "assets", "logo_sc3.png")
