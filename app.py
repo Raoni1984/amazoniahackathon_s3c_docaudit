@@ -787,14 +787,12 @@ def format_date_br(val: Any) -> str:
 
 package_dir = os.path.join(CURRENT_DIR, "participant-package", "challenges-1-2")
 
-# Auto-seed database if empty
+# Auto-seed database if empty (Instantaneous pure SQL)
 OccurrenceDatabase.seed_if_empty(package_dir)
 
 @st.cache_resource
 def get_engine():
     return ExtractorEngine(use_gpu=False)
-
-engine = get_engine()
 
 # Initialize session state caches
 if "current_page" not in st.session_state:
@@ -1625,6 +1623,7 @@ elif current_page == "📂 Dossiê da Ocorrência":
                                 f.write(j_raw_bytes)
 
                         # Process extraction (unbiased directly from image OCR)
+                        engine = get_engine()
                         j_extracted = engine.extract_from_image(j_save_path, raw_text_hint=j_doc_type)
                         j_calib = ConfidenceEvaluator.calibrate_document(j_extracted)
                         

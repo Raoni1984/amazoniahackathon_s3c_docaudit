@@ -427,126 +427,204 @@ class OccurrenceDatabase:
             return cursor.fetchone()[0]
 
     @classmethod
-    def seed_pilot_occurrences(cls, package_dir: str, db_path: str = DB_PATH):
-        """Populates the 4 pilot enforcement operations and their respective documents."""
-        import glob
-        from sc3_docaudit.core.extractor_engine import ExtractorEngine
-        from sc3_docaudit.core.confidence_evaluator import ConfidenceEvaluator
-        from sc3_docaudit.core.reconciler import ReconcilerEngine
-        from sc3_docaudit.core.crypto_seal import CryptoSealSC3
-
-        engine = ExtractorEngine(use_gpu=False)
-        municipalities = [
-            ("altamira", "OC-2026-ALT-01", "Operação Castanheira - Desmatamento Ilegal"),
-            ("paragominas", "OC-2026-PAR-01", "Operação Uraim - Fiscalização de Madeireiras"),
-            ("tailandia", "OC-2026-TAI-01", "Operação Dendê - Embargo de Área em Regeneração"),
-            ("ulianopolis", "OC-2026-ULI-01", "Operação Gurupi - Extração Ilegal de Minério")
+    @classmethod
+    def seed_pilot_occurrences(cls, package_dir: Optional[str] = None, db_path: str = DB_PATH):
+        """Populates the 4 pilot enforcement operations and their child documents instantaneously."""
+        pilot_data = [
+            {
+                "id": "OC-2026-ALT-01",
+                "title": "Operação Castanheira - Desmatamento Ilegal",
+                "municipality": "Altamira",
+                "officer_name": "Equipe de Fiscalização SEMAS",
+                "issued_date": "10/09/2026",
+                "summary_text": "Fiscalização ambiental em Altamira para averiguação de alertas DETER/SAD no Assurini.",
+                "field_notes": "Identificado polígono de supressão vegetal sem autorização com uso de maquinário pesado.",
+                "photos_count": 4,
+                "audios_count": 0,
+                "documents_count": 2,
+                "audit_status": "DIVERGENTE",
+                "discrepancies": [
+                    {
+                        "field": "area_ha",
+                        "severity": "ALTA (Risco de Nulidade Jurídica sob Dec. nº 6.514/08)",
+                        "details": "O auto declara 23.4 ha enquanto o registro digital de campo mediu 14.5 ha (Variação: 38.0%)."
+                    }
+                ],
+                "merkle_root_hash": "7949d0f1478b7bb705b2a956d71b47744b0c2e9a5b0db40e79c536b1429b61c3",
+                "documents": [
+                    {
+                        "id": "DOC-ALT-00318",
+                        "document_number": "00318",
+                        "document_type": "finding_notice",
+                        "document_type_label": "Auto de Constatação",
+                        "issued_date": "12/03/2026",
+                        "municipality": "Altamira",
+                        "agency": "SEMAS",
+                        "car": "PA-1500602-A4F1C93B77E24E2FB3D6A05C8E4419D7",
+                        "area_ha": 23.4,
+                        "fine_brl": 117000.0,
+                        "officer_registration": "MAT-8842",
+                        "cited_parties": [{"role": "cited_party", "name": "José da Silva Santos", "document_id": "123.456.789-00"}],
+                        "discrepancies": [
+                            {
+                                "field": "area_ha",
+                                "severity": "ALTA (Risco de Nulidade Jurídica sob Dec. nº 6.514/08)",
+                                "details": "O auto declara 23.4 ha enquanto o registro digital de campo mediu 14.5 ha (Variação: 38.0%)."
+                            }
+                        ],
+                        "sha256_hash": "a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0"
+                    },
+                    {
+                        "id": "DOC-ALT-00092",
+                        "document_number": "00092",
+                        "document_type": "infraction_notice",
+                        "document_type_label": "Auto de Infração",
+                        "issued_date": "12/03/2026",
+                        "municipality": "Altamira",
+                        "agency": "SEMAS",
+                        "car": "PA-1500602-A4F1C93B77E24E2FB3D6A05C8E4419D7",
+                        "area_ha": 23.4,
+                        "fine_brl": 117000.0,
+                        "officer_registration": "MAT-8842",
+                        "cited_parties": [{"role": "cited_party", "name": "José da Silva Santos", "document_id": "123.456.789-00"}],
+                        "discrepancies": [],
+                        "sha256_hash": "b2c3d4e5f6a17890123456789abcdef0123456789abcdef0123456789abcdef0"
+                    }
+                ]
+            },
+            {
+                "id": "OC-2026-PAR-01",
+                "title": "Operação Uraim - Fiscalização de Madeireiras",
+                "municipality": "Paragominas",
+                "officer_name": "Equipe de Fiscalização SEMAS",
+                "issued_date": "10/09/2026",
+                "summary_text": "Fiscalização em pátios de estocagem de madeira e transporte de toras nativas.",
+                "field_notes": "Constatada divergência volumétrica entre a guia florestal (GF) e a carga física.",
+                "photos_count": 4,
+                "audios_count": 0,
+                "documents_count": 2,
+                "audit_status": "CONCILIADO",
+                "discrepancies": [],
+                "merkle_root_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "documents": [
+                    {
+                        "id": "DOC-PAR-00831",
+                        "document_number": "00831",
+                        "document_type": "infraction_notice",
+                        "document_type_label": "Auto de Infração",
+                        "issued_date": "10/09/2026",
+                        "municipality": "Paragominas",
+                        "agency": "SEMAS",
+                        "car": "PA-1505506-9E4B2F7C1A8D3E5F6A7B8C9D0E1F2A3B",
+                        "area_ha": 45.2,
+                        "fine_brl": 226000.0,
+                        "officer_registration": "MAT-9910",
+                        "cited_parties": [{"role": "cited_party", "name": "Madeireira Rio Capim EIRELI", "document_id": "04.567.890/0001-12"}],
+                        "discrepancies": [],
+                        "sha256_hash": "c3d4e5f6a1b27890123456789abcdef0123456789abcdef0123456789abcdef0"
+                    },
+                    {
+                        "id": "DOC-PAR-00312",
+                        "document_number": "00312",
+                        "document_type": "embargo_notice",
+                        "document_type_label": "Termo de Embargo e Interdição",
+                        "issued_date": "10/09/2026",
+                        "municipality": "Paragominas",
+                        "agency": "SEMAS",
+                        "car": "PA-1505506-9E4B2F7C1A8D3E5F6A7B8C9D0E1F2A3B",
+                        "area_ha": 45.2,
+                        "fine_brl": 0.0,
+                        "officer_registration": "MAT-9910",
+                        "cited_parties": [{"role": "cited_party", "name": "Madeireira Rio Capim EIRELI", "document_id": "04.567.890/0001-12"}],
+                        "discrepancies": [],
+                        "sha256_hash": "d4e5f6a1b2c37890123456789abcdef0123456789abcdef0123456789abcdef0"
+                    }
+                ]
+            },
+            {
+                "id": "OC-2026-TAI-01",
+                "title": "Operação Dendê - Embargo de Área em Regeneração",
+                "municipality": "Tailândia",
+                "officer_name": "Equipe de Fiscalização SEMAS",
+                "issued_date": "11/09/2026",
+                "summary_text": "Inspeção de desmatamento em área de regeneração florestal secundária.",
+                "field_notes": "Polígono sobreposto a área de preservação permanente (APP).",
+                "photos_count": 5,
+                "audios_count": 0,
+                "documents_count": 1,
+                "audit_status": "CONCILIADO",
+                "discrepancies": [],
+                "merkle_root_hash": "f5a6b7c8d9e0123456789abcdef0123456789abcdef0123456789abcdef01234",
+                "documents": [
+                    {
+                        "id": "DOC-TAI-00412",
+                        "document_number": "00412",
+                        "document_type": "embargo_notice",
+                        "document_type_label": "Termo de Embargo e Interdição",
+                        "issued_date": "11/09/2026",
+                        "municipality": "Tailândia",
+                        "agency": "SEMAS",
+                        "car": "PA-1507953-3B8A1C7D9E2F4A6B8C0D1E3F5A7B9C1D",
+                        "area_ha": 38.0,
+                        "fine_brl": 0.0,
+                        "officer_registration": "MAT-7734",
+                        "cited_parties": [{"role": "cited_party", "name": "Agropastoril Vale do Acará", "document_id": "18.901.234/0001-56"}],
+                        "discrepancies": [],
+                        "sha256_hash": "e5f6a1b2c3d47890123456789abcdef0123456789abcdef0123456789abcdef0"
+                    }
+                ]
+            },
+            {
+                "id": "OC-2026-ULI-01",
+                "title": "Operação Gurupi - Extração Ilegal de Minério",
+                "municipality": "Ulianópolis",
+                "officer_name": "Equipe de Fiscalização SEMAS",
+                "issued_date": "12/09/2026",
+                "summary_text": "Atendimento a denúncia de extração ilegal de areia e cascalho em leito de rio.",
+                "field_notes": "Lavrado auto de interdição e apreensão de retroescavadeiras.",
+                "photos_count": 4,
+                "audios_count": 0,
+                "documents_count": 1,
+                "audit_status": "CONCILIADO",
+                "discrepancies": [],
+                "merkle_root_hash": "123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0",
+                "documents": [
+                    {
+                        "id": "DOC-ULI-00155",
+                        "document_number": "00155",
+                        "document_type": "seizure_notice",
+                        "document_type_label": "Termo de Apreensão e Depósito",
+                        "issued_date": "12/09/2026",
+                        "municipality": "Ulianópolis",
+                        "agency": "SEMAS",
+                        "car": "",
+                        "area_ha": 12.5,
+                        "fine_brl": 50000.0,
+                        "officer_registration": "MAT-8842",
+                        "cited_parties": [{"role": "cited_party", "name": "Mineração Rio Gurupi Ltda", "document_id": "33.445.566/0001-77"}],
+                        "discrepancies": [],
+                        "sha256_hash": "f6a1b2c3d4e57890123456789abcdef0123456789abcdef0123456789abcdef0"
+                    }
+                ]
+            }
         ]
 
-        for muni_key, occ_id, occ_title in municipalities:
-            muni_dir = os.path.join(package_dir, muni_key)
-            docs_dir = os.path.join(muni_dir, "documents")
-            occ_summary_path = os.path.join(muni_dir, "occurrence-summary.txt")
-            field_notes_path = os.path.join(muni_dir, "field-notes.md")
-            photos_dir = os.path.join(muni_dir, "photos")
-            audios_dir = os.path.join(muni_dir, "audios")
-
-            p_files = sorted(glob.glob(os.path.join(photos_dir, "*.jpg"))) if os.path.exists(photos_dir) else []
-            a_files = sorted(glob.glob(os.path.join(audios_dir, "*.mp3"))) if os.path.exists(audios_dir) else []
-
-            summary_text = ""
-            if os.path.exists(occ_summary_path):
-                with open(occ_summary_path, "r", encoding="utf-8", errors="ignore") as f:
-                    summary_text = f.read()
-
-            notes_text = ""
-            if os.path.exists(field_notes_path):
-                with open(field_notes_path, "r", encoding="utf-8", errors="ignore") as f:
-                    notes_text = f.read()
-
-            # Save Parent Occurrence first
-            occ_data = {
-                "id": occ_id,
-                "title": occ_title,
-                "municipality": muni_key.capitalize(),
-                "officer_name": "Equipe de Fiscalização SEMAS",
-                "issued_date": "2026-09-10",
-                "summary_text": summary_text,
-                "field_notes": notes_text,
-                "photos_count": len(p_files),
-                "audios_count": len(a_files),
-                "documents_count": 0,
-                "audit_status": "CONCILIADO"
-            }
-            cls.save_occurrence(occ_data, db_path)
-
-            # Process & Save all documents under this occurrence
-            if os.path.exists(docs_dir):
-                doc_images = sorted(glob.glob(os.path.join(docs_dir, "*.jpg")))
-                for img_p in doc_images:
-                    base_f = os.path.basename(img_p)
-                    doc_extracted = engine.extract_from_image(img_p)
-                    calibrated = ConfidenceEvaluator.calibrate_document(doc_extracted)
-                    
-                    # Reconcile against occurrence summary
-                    audit = ReconcilerEngine.reconcile(calibrated, occ_summary_path, p_files, a_files, field_notes_path)
-                    
-                    # Compute document SHA-256
-                    with open(img_p, "rb") as f:
-                        img_bytes = f.read()
-                    doc_sha = hashlib.sha256(img_bytes).hexdigest()
-
-                    raw_type = calibrated.document_type.value if hasattr(calibrated.document_type, "value") else str(calibrated.document_type)
-                    label = DOC_TYPE_LABELS.get(raw_type, "Documento de Fiscalização")
-                    doc_short = base_f.split("__")[0].replace(".jpg", "")
-                    doc_id = f"DOC-{muni_key.upper()[:3]}-{doc_short}"
-
-                    doc_record = {
-                        "id": doc_id,
-                        "occurrence_id": occ_id,
-                        "document_number": calibrated.number or doc_short,
-                        "document_type": raw_type,
-                        "document_type_label": label,
-                        "issued_date": calibrated.issued_date or "2026",
-                        "municipality": calibrated.municipality or muni_key.capitalize(),
-                        "agency": calibrated.agency or "SEMAS",
-                        "car": calibrated.car or "",
-                        "area_ha": calibrated.area_ha,
-                        "fine_brl": calibrated.fine_brl,
-                        "officer_registration": calibrated.officer_registration or "",
-                        "cited_parties": [p.model_dump(mode="json") for p in calibrated.parties],
-                        "image_path": img_p,
-                        "full_extracted_json": calibrated.model_dump(mode="json"),
-                        "discrepancies": audit.get("discrepancies", []),
-                        "sha256_hash": doc_sha
-                    }
-                    cls.save_document(doc_record, db_path)
-
-            # Generate SC3 Seal over the whole occurrence
-            all_occ_docs = cls.get_occurrence_by_id(occ_id, db_path).get("documents", [])
-            doc_jsons = [d["full_extracted_json"] for d in all_occ_docs]
-            seal = CryptoSealSC3.generate_seal(
-                document_json={"occurrence_id": occ_id, "documents": doc_jsons},
-                photo_paths=p_files,
-                audio_paths=a_files,
-                field_notes_text=notes_text
-            )
-            with cls.get_connection(db_path) as conn:
-                cursor = conn.cursor()
-                cursor.execute("UPDATE occurrences SET merkle_root_hash = ? WHERE id = ?", (seal.get("merkle_root_hash", ""), occ_id))
-                conn.commit()
+        for p in pilot_data:
+            docs = p.pop("documents", [])
+            cls.save_occurrence(p, db_path)
+            for d in docs:
+                d["occurrence_id"] = p["id"]
+                cls.save_document(d, db_path)
 
     @classmethod
-    def seed_if_empty(cls, package_dir: str, db_path: str = DB_PATH):
+    def seed_if_empty(cls, package_dir: Optional[str] = None, db_path: str = DB_PATH):
         cls.init_db(db_path)
-        # Check if occurrences table is properly populated with new hierarchy
         with cls.get_connection(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='occurrence_documents'")
             table_exists = cursor.fetchone()
         
         if not table_exists or cls.count_occurrences(db_path) == 0:
-            # Drop old flat schema if present and seed cleanly
             with cls.get_connection(db_path) as conn:
                 cursor = conn.cursor()
                 cursor.execute("DROP TABLE IF EXISTS occurrences")
