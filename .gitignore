@@ -25,7 +25,15 @@ dist/
 # Participant package data (Rule 1 of Hackathon: do not redistribute sensitive data)
 participant-package/
 
-# Outputs
+# Pitch & Presentation notes
+PITCH.TXT
+pitch.txt
+*pitch*.txt
+
+# Outputs & DBs
 output/
 results/
 temp/
+*.db
+*.sqlite3
+.agents/
