@@ -37,17 +37,20 @@ except Exception as e:
 
 
 @app.get("/api/health")
+@app.get("/health")
 def health_check():
     return {"status": "ok", "version": "1.2.4", "timestamp": datetime.datetime.now().isoformat(), "cost_per_doc": "R$ 0,00"}
 
 
 @app.get("/api/occurrences")
+@app.get("/occurrences")
 def list_occurrences():
     occurrences = OccurrenceDatabase.get_all_occurrences()
     return {"total": len(occurrences), "occurrences": occurrences}
 
 
 @app.get("/api/dossier/{occ_id}")
+@app.get("/dossier/{occ_id}")
 def get_dossier(occ_id: str):
     occ = OccurrenceDatabase.get_occurrence_by_id(occ_id)
     if not occ:
@@ -58,6 +61,7 @@ def get_dossier(occ_id: str):
 
 
 @app.get("/api/dossier/{occ_id}/sc3")
+@app.get("/dossier/{occ_id}/sc3")
 def download_sc3_container(occ_id: str):
     occ = OccurrenceDatabase.get_occurrence_by_id(occ_id)
     if not occ:
@@ -83,6 +87,9 @@ def download_sc3_container(occ_id: str):
 
 
 @app.get("/", response_class=HTMLResponse)
+@app.get("/api", response_class=HTMLResponse)
+@app.get("/api/index", response_class=HTMLResponse)
+@app.get("/api/index.py", response_class=HTMLResponse)
 def index_dashboard(dossie: Optional[str] = None):
     all_occs = OccurrenceDatabase.get_all_occurrences()
     selected_id = dossie if (dossie and any(o["id"] == dossie for o in all_occs)) else (all_occs[0]["id"] if all_occs else "")
