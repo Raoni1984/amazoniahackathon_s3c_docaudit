@@ -33,21 +33,7 @@ import sc3_docaudit.core.database
 importlib.reload(sc3_docaudit.core.database)
 from sc3_docaudit.core.database import OccurrenceDatabase, DB_PATH
 
-# Vercel Serverless entrypoint compatibility
-try:
-    # pyrefly: ignore [missing-import]
-    from api.index import app, app as application, app as handler  # type: ignore
-except Exception:
-    try:
-        # pyrefly: ignore [missing-import]
-        from fastapi import FastAPI  # type: ignore
-        app = FastAPI()
-        application = app
-        handler = app
-    except Exception:
-        app = None
-        application = None
-        handler = None
+# Imports ready for local execution
 
 from sc3_docaudit.core.gps_parser import GPSParser
 
