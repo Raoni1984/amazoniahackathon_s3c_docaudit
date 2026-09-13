@@ -1039,40 +1039,11 @@ elif current_page == "➕ Criar Ocorrência":
 
         new_summary = st.text_area("Resumo da Ocorrência / Notas de Campo:", f"Fiscalização ambiental realizada no município de {new_muni} para averiguação de alertas de desmatamento e ilícitos florestais.", height=100)
 
-        st.markdown("<p style='font-size:15px;font-weight:700;color:#1E6B52;margin:12px 0 2px;'>📄 Capturar ou Anexar Documento Físico Inicial (Auto ou Termo)</p>", unsafe_allow_html=True)
-        st.markdown("<small style='color:#666;'>Tire uma foto direta pela câmera do celular/computador ou envie arquivos/PDFs do auto:</small>", unsafe_allow_html=True)
-        
-        tab_cam, tab_file = st.tabs(["📸 Tirar Foto com a Câmera", "📁 Upload de Arquivo / PDF"])
-        with tab_cam:
-            open_cam = st.toggle("📷 Abrir Câmera (Autorizar Acesso)", value=False, key="toggle_cam_create")
-            if open_cam:
-                cam_doc = st.camera_input("Posicione o documento em frente à câmera e capture a foto:", key="init_cam_upload")
-            else:
-                cam_doc = None
-                st.caption("🔒 Câmera desativada. Ative o botão acima 'Abrir Câmera' para autorizar e ligar o visor do dispositivo.")
-        with tab_file:
-            file_doc = st.file_uploader("Foto ou PDF do Documento:", type=["jpg", "jpeg", "png", "pdf"], key="init_doc_upload")
-            up_photos = st.file_uploader("Fotos Georreferenciadas de Campo (opcional):", accept_multiple_files=True, type=["jpg", "jpeg", "png"], key="init_photos_upload")
-        
-        up_doc = cam_doc if cam_doc is not None else file_doc
-
-        st.markdown("<div style='margin-top:14px;'></div>", unsafe_allow_html=True)
-        submit_btn = st.button("Criar Ocorrência", type="primary", use_container_width=True, key="btn_submit_create_occ")
+        st.markdown("<div style='margin-top:16px;'></div>", unsafe_allow_html=True)
+        submit_btn = st.button("💾 Criar Ocorrência e Abrir Dossiê", type="primary", use_container_width=True, key="btn_submit_create_occ")
 
     if submit_btn:
-        with st.spinner("Criando ocorrência no SQLite e calculando árvore de custódia Merkle Root SC3..."):
-            temp_dir = os.path.join(CURRENT_DIR, "temp", new_id)
-            os.makedirs(temp_dir, exist_ok=True)
-            timestamp_str = str(int(time.time()))
-
-            attached_photos = []
-            if up_photos:
-                for idx, pfile in enumerate(up_photos):
-                    p_save = os.path.join(temp_dir, f"photo_{timestamp_str}_{idx}.jpg")
-                    with open(p_save, "wb") as pf:
-                        pf.write(pfile.getvalue())
-                    attached_photos.append(p_save)
-
+        with st.spinner("Criando ocorrência no SQLite e inicializando árvore de custódia Merkle Root SC3..."):
             # 1. Save Parent Occurrence
             occ_payload = {
                 "id": new_id,
@@ -1082,85 +1053,17 @@ elif current_page == "➕ Criar Ocorrência":
                 "issued_date": format_date_br(new_date),
                 "summary_text": new_summary,
                 "field_notes": new_summary,
-                "photos_count": len(attached_photos),
+                "photos_count": 0,
                 "audios_count": 0,
                 "documents_count": 0,
                 "audit_status": "CONCILIADO"
             }
             OccurrenceDatabase.save_occurrence(occ_payload)
 
-            # 2. If initial document attached, process and attach as child
-            if up_doc:
-                doc_bytes_raw = up_doc.getvalue()
-                is_pdf = (hasattr(up_doc, "name") and str(up_doc.name).lower().endswith(".pdf")) or doc_bytes_raw.startswith(b"%PDF")
-                
-                if is_pdf:
-                    pdf_save_path = os.path.join(temp_dir, f"doc_initial_{timestamp_str}.pdf")
-                    with open(pdf_save_path, "wb") as pf:
-                        pf.write(doc_bytes_raw)
-                    try:
-                        import pypdfium2 as pdfium
-                        pdf = pdfium.PdfDocument(pdf_save_path)
-                        page = pdf[0]
-                        pil_page = page.render(scale=2.0).to_pil()
-                        doc_save_path = os.path.join(temp_dir, f"doc_initial_{timestamp_str}.jpg")
-                        pil_page.save(doc_save_path, "JPEG", quality=95)
-                    except Exception:
-                        doc_save_path = pdf_save_path
-                else:
-                    doc_save_path = os.path.join(temp_dir, f"doc_initial_{timestamp_str}.jpg")
-                    with open(doc_save_path, "wb") as df:
-                        df.write(doc_bytes_raw)
-
-                # OpenCV Preprocessing & Engine Extraction
-                enhanced_rgb, binarized, angle = DocumentPreprocessor.process_pipeline(doc_save_path)
-                extracted_doc = engine.extract_from_image(doc_save_path, raw_text_hint=f"{new_muni} {new_title}")
-                calibrated_doc = ConfidenceEvaluator.calibrate_document(extracted_doc)
-
-                with open(doc_save_path, "rb") as f:
-                    doc_bytes = f.read()
-                doc_sha = hashlib.sha256(doc_bytes).hexdigest()
-
-                raw_type = calibrated_doc.document_type.value if hasattr(calibrated_doc.document_type, "value") else str(calibrated_doc.document_type)
-                label = DOC_TYPE_LABELS.get(raw_type, "Documento de Fiscalização")
-
-                doc_discs = []
-                doc_muni = calibrated_doc.municipality or ""
-                if doc_muni and new_muni and new_muni != "Novo Município":
-                    clean_doc_m = re.sub(r'[^a-zA-Z0-9]', '', doc_muni.lower())
-                    clean_new_m = re.sub(r'[^a-zA-Z0-9]', '', new_muni.lower())
-                    if clean_doc_m != clean_new_m:
-                        doc_discs.append({
-                            "field": "municipality",
-                            "severity": "ALTA (Risco de Incompetência Territorial / Dec. nº 6.514/08)",
-                            "details": f"O município da operação ({new_muni}) diverge da jurisdição identificada no auto físico ({doc_muni})."
-                        })
-
-                doc_record = {
-                    "id": f"DOC-{new_id}-001",
-                    "occurrence_id": new_id,
-                    "document_number": calibrated_doc.number or "001",
-                    "document_type": raw_type,
-                    "document_type_label": label,
-                    "issued_date": format_date_br(calibrated_doc.issued_date or new_date),
-                    "municipality": calibrated_doc.municipality or new_muni,
-                    "agency": calibrated_doc.agency or "SEMAS",
-                    "car": calibrated_doc.car or "",
-                    "area_ha": calibrated_doc.area_ha,
-                    "fine_brl": calibrated_doc.fine_brl,
-                    "officer_registration": calibrated_doc.officer_registration or "",
-                    "cited_parties": [p.model_dump(mode="json") for p in calibrated_doc.parties],
-                    "image_path": doc_save_path,
-                    "full_extracted_json": calibrated_doc.model_dump(mode="json"),
-                    "discrepancies": doc_discs,
-                    "sha256_hash": doc_sha
-                }
-                OccurrenceDatabase.save_document(doc_record)
-
-            # Generate SC3 Seal
+            # 2. Generate Initial SC3 Seal
             seal = CryptoSealSC3.generate_seal(
-                document_json={"occurrence_id": new_id, "summary": new_summary},
-                photo_paths=attached_photos,
+                document_json={"occurrence_id": new_id, "title": new_title, "municipality": new_muni, "officer": new_officer, "date": new_date, "summary": new_summary},
+                photo_paths=[],
                 field_notes_text=new_summary
             )
             with OccurrenceDatabase.get_connection() as conn:
@@ -1171,7 +1074,7 @@ elif current_page == "➕ Criar Ocorrência":
             st.session_state["selected_occ_id"] = new_id
             st.session_state["selected_doc_idx"] = 0
             st.session_state["current_page"] = "📂 Dossiê da Ocorrência"
-            st.success(f"🎉 Ocorrência **{new_id}** criada e persistida com sucesso no SQLite!")
+            st.success(f"🎉 Ocorrência **{new_id}** criada com sucesso! Redirecionando para o Dossiê...")
             st.rerun()
 
 
@@ -1599,8 +1502,8 @@ elif current_page == "📂 Dossiê da Ocorrência":
                             with open(j_save_path, "wb") as f:
                                 f.write(j_raw_bytes)
 
-                        # Process extraction
-                        j_extracted = engine.extract_from_image(j_save_path, raw_text_hint=f"{selected_record['municipality']} {j_doc_type}")
+                        # Process extraction (unbiased directly from image OCR)
+                        j_extracted = engine.extract_from_image(j_save_path, raw_text_hint=j_doc_type)
                         j_calib = ConfidenceEvaluator.calibrate_document(j_extracted)
                         
                         with open(j_save_path, "rb") as f:
