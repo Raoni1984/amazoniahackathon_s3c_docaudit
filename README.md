@@ -12,7 +12,7 @@
 ---
 
 <div align="center">
-  <h3>🌐 <b>Language / Idioma:</b> <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português (PT-BR)</a></h3>
+  <h3>🌐 <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português (PT-BR)</a></h3>
 </div>
 
 ---
@@ -29,6 +29,20 @@ The system implements the **Occurrence-First Architecture**: physical notices (f
 
 ---
 
+### 📱 Understanding the Two Applications in this Repository
+
+1. **The Complete Interactive Application (`app.py` — Local Streamlit):**
+   * The complete edge software with all interactive tabs, evidence upload forms with live camera shutter, field voice notes audio player, field photography viewer, and real-time Human-in-the-Loop correction.
+   * Run locally with:
+     ```bash
+     streamlit run app.py
+     ```
+
+2. **The Web Portal / Serverless API (`api/index.py` — Vercel):**
+   * The public web interface and REST API engineered for the evaluation panel and court experts (TJPA/MPF) to consult audited records, verify Merkle Roots, and download `.sc3` and `.json` files with zero downtime.
+
+---
+
 ### 🎯 Direct Challenge Alignment & Full Compliance
 
 | Challenge Milestone | How SC3 DocAudit Solves It | Technical Artifacts |
@@ -36,18 +50,6 @@ The system implements the **Occurrence-First Architecture**: physical notices (f
 | **🌿 Challenge 1: Drafting the Enforcement Report** | Ingests multimodal field inputs (`occurrence-summary.txt`, `field-notes.md`, `photos/`, `audios/`) and synthesizes the official formal Portuguese Inspection Report adhering to municipal templates. | `sc3_docaudit/core/database.py`<br>`sc3_docaudit/core/gps_parser.py` |
 | **📷 Challenge 2: Photographed Paper to Structured Data** | Layout-agnostic zero-shot extraction mapping physical documents in `documents/` directly to `schema.md` JSON files with identical basenames. Calibrates field-level confidence scores ($0.0$ to $1.0$) with zero hallucination. | `sc3_docaudit/core/extractor_engine.py`<br>`sc3_docaudit/core/confidence_evaluator.py`<br>`cli.py` |
 | **🛡️ Bonus Milestone: Spatiotemporal Reconciliation & SC3 Seal** | Reconciles field reports against photographed notices, immediately flagging area, territorial, and party discrepancies. Computes irreversible SHA-256 Merkle proofs and exports `.sc3` court-ready forensic containers. | `sc3_docaudit/core/reconciler.py`<br>`sc3_docaudit/core/crypto_seal.py`<br>`api/index.py` |
-
----
-
-### 💰 Cost Matrix: Commercial Cloud AI vs. SC3 DocAudit
-
-| Metric | Commercial Cloud LLM Pipeline | SC3 DocAudit (Edge-Native) |
-| :--- | :--- | :--- |
-| **Cost per Document** | ~$0.12 - $0.35 (Token & Vision API costs) | **$0.00 (R$ 0,00)** |
-| **Annual Cost (10,000 docs)** | ~$2,500.00 USD (~R$ 14.000,00) | **$0.00 (R$ 0,00)** |
-| **Internet Dependency** | Mandatory (Fails in remote rainforest) | **100% Offline (Edge CPU / PWA)** |
-| **Hallucination Risk** | High (Generative drift in CPFs and areas) | **Zero (Deterministic calibration & legal rationales)** |
-| **Judicial Chain of Custody** | None | **Immutable Merkle Tree (.sc3 container)** |
 
 ---
 
@@ -82,7 +84,8 @@ AmazoniaHack2026/
 ├── app.py                           # Full Streamlit Web App & Evidence Vault
 ├── cli.py                           # Batch CLI processing tool
 ├── vercel.json                      # Vercel deployment routing configuration
-├── requirements.txt                 # Project dependencies
+├── requirements.txt                 # Vercel lightweight dependencies
+├── requirements-dev.txt             # Full local development dependencies
 └── README.md                        # Bilingual Master Documentation
 ```
 
@@ -94,7 +97,7 @@ AmazoniaHack2026/
 ```bash
 git clone https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit.git
 cd amazoniahackathon_s3c_docaudit
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 #### 2. Run Automated Test Suite (17 Tests)
@@ -132,6 +135,20 @@ Adotando o paradigma **Centrado na Ocorrência**: cada operação fiscalizatóri
 
 ---
 
+### 📱 Esclarecendo a Diferença entre as Duas Aplicações:
+
+1. **O App Completo Interativo (`app.py` — Streamlit Local):**
+   * É o software completo que desenvolvemos com todas as abas interativas, formulários de juntada com câmera, player de gravações de voz, visualizador de fotografias de campo e correção em tempo real.
+   * Você roda localmente no seu computador com:
+     ```bash
+     streamlit run app.py
+     ```
+
+2. **O Portal Web / API Serverless (`api/index.py` — Vercel):**
+   * É a interface pública e API REST para a banca e peritos dos Tribunais (TJPA/MPF) consultarem os dados auditados, verificarem a Raiz de Merkle e baixarem os arquivos `.sc3` e `.json` sem risco de travar ou cair.
+
+---
+
 ### 🎯 Conformidade Integral com os Desafios do Hackathon
 
 | Desafio Oficial | Como o SC3 DocAudit Implementa |
@@ -142,25 +159,13 @@ Adotando o paradigma **Centrado na Ocorrência**: cada operação fiscalizatóri
 
 ---
 
-### 💰 Comparativo de Custo: Nuvem Comercial vs. SC3 DocAudit
-
-| Métrica | Solução com LLMs Proprietários | SC3 DocAudit (Edge-Native) |
-| :--- | :--- | :--- |
-| **Custo por Documento** | ~R$ 0,70 a R$ 2,00 (Chamadas de API) | **R$ 0,00** |
-| **Custo Anual (10.000 autos)** | ~R$ 14.000,00 a R$ 25.000,00 | **R$ 0,00** |
-| **Dependência de Internet** | Obrigatória (Inviável na mata fechada) | **100% Offline (Edge CPU / PWA)** |
-| **Risco de Alucinação** | Alto (Divergências em CPFs e áreas) | **Zero (Extração determinística & explicável)** |
-| **Cadeia de Custódia Judicial** | Inexistente | **Árvore de Merkle (.sc3 inviolável)** |
-
----
-
 ### 🛠️ Como Executar
 
 #### 1. Instalar Dependências
 ```bash
 git clone https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit.git
 cd amazoniahackathon_s3c_docaudit
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 #### 2. Executar Suíte de Testes (17 Testes)
