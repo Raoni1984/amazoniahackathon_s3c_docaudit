@@ -16,9 +16,7 @@ dist/
 *.egg-info/
 
 # Streamlit
-.streamlit/
-
-# Secret / Local configs
+.streamlit/secrets.toml
 .secrets*
 *.key
 

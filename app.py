@@ -117,6 +117,111 @@ st.markdown("""
         pointer-events: none !important;
     }
 
+    /* Universal Streamlit Button Styles */
+    button[kind="primary"],
+    button[data-testid="baseButton-primary"] {
+        background-color: #1E6B52 !important;
+        background: #1E6B52 !important;
+        color: #FFFFFF !important;
+        border: 1.5px solid #14533D !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+    }
+    button[kind="primary"] p,
+    button[kind="primary"] span,
+    button[data-testid="baseButton-primary"] p,
+    button[data-testid="baseButton-primary"] span {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+    }
+    button[kind="primary"]:hover,
+    button[data-testid="baseButton-primary"]:hover {
+        background-color: #14533D !important;
+        background: #14533D !important;
+        color: #FFFFFF !important;
+    }
+
+    button[kind="secondary"],
+    button[data-testid="baseButton-secondary"] {
+        background-color: #FFFFFF !important;
+        background: #FFFFFF !important;
+        color: #1A1A1A !important;
+        border: 1.5px solid #DCE3E8 !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+    }
+    button[kind="secondary"] p,
+    button[kind="secondary"] span,
+    button[data-testid="baseButton-secondary"] p,
+    button[data-testid="baseButton-secondary"] span {
+        color: #1A1A1A !important;
+        font-weight: 600 !important;
+    }
+    button[kind="secondary"]:hover,
+    button[data-testid="baseButton-secondary"]:hover {
+        border-color: #1E6B52 !important;
+        background-color: #F0FDF4 !important;
+        color: #1E6B52 !important;
+    }
+    button[kind="secondary"]:hover p,
+    button[kind="secondary"]:hover span {
+        color: #1E6B52 !important;
+    }
+
+    /* Form Inputs & Labels */
+    label, 
+    .stTextInput label, 
+    .stTextArea label, 
+    .stSelectbox label, 
+    .stDateInput label, 
+    .stNumberInput label {
+        color: #1A1A1A !important;
+        font-weight: 600 !important;
+        font-size: 13.5px !important;
+    }
+
+    .stTextInput input,
+    .stTextArea textarea,
+    .stNumberInput input,
+    div[data-baseweb="input"] input,
+    div[data-baseweb="textarea"] textarea {
+        background-color: #FFFFFF !important;
+        color: #1A1A1A !important;
+        border: 1.5px solid #DCE3E8 !important;
+        border-radius: 8px !important;
+    }
+    .stTextInput input:focus,
+    .stTextArea textarea:focus,
+    div[data-baseweb="input"] input:focus {
+        border-color: #1E6B52 !important;
+        box-shadow: 0 0 0 1px #1E6B52 !important;
+    }
+
+    /* Selectbox / Dropdowns */
+    div[data-baseweb="select"] > div {
+        background-color: #FFFFFF !important;
+        color: #1A1A1A !important;
+        border: 1.5px solid #DCE3E8 !important;
+        border-radius: 8px !important;
+    }
+    div[data-baseweb="select"] span,
+    div[data-baseweb="select"] div {
+        color: #1A1A1A !important;
+    }
+    ul[data-baseweb="menu"],
+    div[data-baseweb="popover"] {
+        background-color: #FFFFFF !important;
+        color: #1A1A1A !important;
+    }
+    li[data-baseweb="menu-item"] {
+        color: #1A1A1A !important;
+        background-color: #FFFFFF !important;
+    }
+    li[data-baseweb="menu-item"]:hover {
+        background-color: #F0FDF4 !important;
+        color: #1E6B52 !important;
+    }
+
     /* Accordion Expanders */
     [data-testid="stExpander"] {
         border: 1.5px solid #DCE3E8 !important;
