@@ -1,14 +1,3 @@
----
-title: SC3 DocAudit - AmazoniaHack 2026
-emoji: 🛡️
-colorFrom: green
-colorTo: emerald
-sdk: docker
-app_port: 7860
-pinned: false
-license: mit
----
-
 # 🛡️ SC3 DocAudit
 ### Intelligent Extraction, Uncertainty Calibration, and Cryptographic Chain of Custody for Environmental Enforcement in the Amazon
 
@@ -18,7 +7,7 @@ license: mit
 [![Cost](https://img.shields.io/badge/Cost%20per%20Doc-R%24%200%2C00%20(Zero--Cost%20Offline)-brightgreen.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Privacy](https://img.shields.io/badge/LGPD-100%25%20Compliant%20by%20Design-0284c7.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Tests](https://img.shields.io/badge/Tests-17%2F17%20Passing-success.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
-[![Live Demo](https://img.shields.io/badge/Streamlit%20Cloud-Live%20Demo-red.svg)](https://amazoniahackathons3cdocaudit-nmluix5bwjqrtjt4sfysv2.streamlit.app/)
+[![Vercel](https://img.shields.io/badge/Deploy-Vercel%20Serverless%20FastAPI-black.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 
 ---
 
@@ -30,87 +19,35 @@ license: mit
 
 ## English Documentation
 
-### 🌐 Live Cloud Demo & Court Deep Links
-- **Production Dashboard:** [amazoniahackathons3cdocaudit.streamlit.app](https://amazoniahackathons3cdocaudit-nmluix5bwjqrtjt4sfysv2.streamlit.app/)
-- **Direct Judicial Expert Deep Link (Example):** `https://amazoniahackathons3cdocaudit-nmluix5bwjqrtjt4sfysv2.streamlit.app/?dossie=OC-2026-ALT-01`
+### 📌 System Overview & Executive Summary
+
+**SC3 DocAudit** is an edge-native intelligence, document extraction, and forensic auditing platform engineered to operate **100% offline** under extreme field conditions in the Amazon rainforest.
+
+It addresses the single largest point of failure in Brazilian environmental enforcement: the mass judicial nullification of infraction notices and embargoes due to manual transcription errors, spatial discrepancies, and challenged evidentiary chains of custody.
+
+The system implements the **Occurrence-First Architecture**: physical notices (finding notices, infractions, embargos, seizures), multimodal evidence (georeferenced photos, voice notes, GPS tracks), and digital records are bound into an autonomous, persistent dossier in **SQLite**, cryptographically sealed via the **SC3 Protocol** (*SHA-256 Merkle Tree Proofs conforming to Arts. 158-A to 158-F of the Brazilian Criminal Procedure Code*).
 
 ---
 
-### 📌 Hackathon Alignment & Design Highlights
+### 🎯 Direct Challenge Alignment & Full Compliance
 
-| Criteria | Implementation in SC3 DocAudit |
-| :--- | :--- |
-| **1. End-to-End Delivery** | Full-stack execution: Ingestion ➔ OpenCV Preprocessing ➔ Zero-Shot Extraction ➔ Uncertainty Calibration ➔ Spatiotemporal Reconciliation ➔ Merkle Cryptographic Sealing ➔ Responsive Web & Judicial Export (`.sc3`). |
-| **2. Active Data Ingestion** | Comprehensive ingestion of all pilot dossiers (Altamira, Paragominas, Tailândia, Ulianópolis) + GPS formats (Garmin GPX, KML, CSV/GMS) conforming to Federal Decree 6,514/2008. |
-| **3. Declare Uncertainty** | `ConfidenceEvaluator` assigns dynamic confidence scores ($0.0$ to $1.0$) based on image metrics. Missing or ambiguous data yields explicit `null` with legal reasoning rather than AI hallucination. |
-| **4. Adversarial Self-Validation** | Synthetic test suites simulating field adversity: low-light photos, skewed angles, truck-hood shadows, engine noise, and wrinkled field sheets. |
-| **5. Cost as a Design Constraint** | **Zero-Cost ($0.00 / doc):** 100% offline edge processing. Zero dependency on costly cloud LLM tokens, enabling instant adoption by small Amazonian municipal secretariats. |
-| **6. Bonus Milestone (SC3 Protocol)** | **Irreversible Chain of Custody:** Cryptographic SHA-256 Merkle Tree mathematically binds paper notices with GPS photos, voice memos, and field logs (Arts. 158-A to 158-F, Brazilian Criminal Procedure Code). |
+| Challenge Milestone | How SC3 DocAudit Solves It | Technical Artifacts |
+| :--- | :--- | :--- |
+| **🌿 Challenge 1: Drafting the Enforcement Report** | Ingests multimodal field inputs (`occurrence-summary.txt`, `field-notes.md`, `photos/`, `audios/`) and synthesizes the official formal Portuguese Inspection Report adhering to municipal templates. | `sc3_docaudit/core/database.py`<br>`sc3_docaudit/core/gps_parser.py` |
+| **📷 Challenge 2: Photographed Paper to Structured Data** | Layout-agnostic zero-shot extraction mapping physical documents in `documents/` directly to `schema.md` JSON files with identical basenames. Calibrates field-level confidence scores ($0.0$ to $1.0$) with zero hallucination. | `sc3_docaudit/core/extractor_engine.py`<br>`sc3_docaudit/core/confidence_evaluator.py`<br>`cli.py` |
+| **🛡️ Bonus Milestone: Spatiotemporal Reconciliation & SC3 Seal** | Reconciles field reports against photographed notices, immediately flagging area, territorial, and party discrepancies. Computes irreversible SHA-256 Merkle proofs and exports `.sc3` court-ready forensic containers. | `sc3_docaudit/core/reconciler.py`<br>`sc3_docaudit/core/crypto_seal.py`<br>`api/index.py` |
 
 ---
 
-### 🏗️ Technical Architecture & Data Flow
-
-```
-                                ┌──────────────────────────────────────┐
-                                │ Physical Field Notice (Camera / JPG) │
-                                └──────────────────┬───────────────────┘
-                                                   │
-                                                   ▼
-                                ┌──────────────────────────────────────┐
-                                │ 1. OpenCV Preprocessing Engine       │
-                                │   - Deskew rotation angle estimation │
-                                │   - Shadow attenuation & binarization│
-                                └──────────────────┬───────────────────┘
-                                                   │
-                                                   ▼
-                                ┌──────────────────────────────────────┐
-                                │ 2. Zero-Shot Semantic Extractor      │
-                                │   - Multi-field entity extraction    │
-                                │   - Schema.md strict adherence       │
-                                └──────────────────┬───────────────────┘
-                                                   │
-                                                   ▼
- ┌───────────────────────────┐  ┌──────────────────────────────────────┐
- │ Multimodal Field Evidence │  │ 3. Calibrated Uncertainty Evaluator  │
- │ (GPS Photos, Voice Notes) │  │   - Confidence scoring (0.0 - 1.0)   │
- └─────────────┬─────────────┘  │   - Anti-hallucination guardrails    │
-               │                └──────────────────┬───────────────────┘
-               │                                   │
-               └─────────────────┬─────────────────┘
-                                 │
-                                 ▼
-               ┌───────────────────────────────────┐
-               │ 4. SC3 Forensic Reconciler Engine │
-               │   - Spatiotemporal cross-check    │
-               │   - Merkle Tree SHA-256 root seal │
-               └─────────────────┬─────────────────┘
-                                 │
-                                 ▼
-               ┌───────────────────────────────────┐
-               │ 5. Persistent Local SQLite DB     │
-               │   (sc3_docaudit/data/occurrences) │
-               └─────────────────┬─────────────────┘
-                                 │
-                                 ▼
-               ┌───────────────────────────────────┐
-               │ 6. Occurrence-First Web Platform  │
-               │   - Deep forensic dossier viewer  │
-               │   - .sc3 Forensic Container export│
-               └───────────────────────────────────┘
-```
-
----
-
-### 💰 Cost Comparison: Commercial Cloud AI vs. SC3 DocAudit
+### 💰 Cost Matrix: Commercial Cloud AI vs. SC3 DocAudit
 
 | Metric | Commercial Cloud LLM Pipeline | SC3 DocAudit (Edge-Native) |
 | :--- | :--- | :--- |
 | **Cost per Document** | ~$0.12 - $0.35 (Token & Vision API costs) | **$0.00 (R$ 0,00)** |
 | **Annual Cost (10,000 docs)** | ~$2,500.00 USD (~R$ 14.000,00) | **$0.00 (R$ 0,00)** |
-| **Internet Dependency** | Mandatory (Fails in deep Amazon rainforest) | **100% Offline (Edge CPU)** |
-| **Hallucination Risk** | Significant (Generative drift in names/dates) | **Zero (Deterministic extraction & calibration)** |
-| **Judicial Chain of Custody** | None (Third-party cloud transmission) | **Immutable Merkle Tree (.sc3 container)** |
+| **Internet Dependency** | Mandatory (Fails in remote rainforest) | **100% Offline (Edge CPU / PWA)** |
+| **Hallucination Risk** | High (Generative drift in CPFs and areas) | **Zero (Deterministic calibration & legal rationales)** |
+| **Judicial Chain of Custody** | None | **Immutable Merkle Tree (.sc3 container)** |
 
 ---
 
@@ -118,6 +55,9 @@ license: mit
 
 ```
 AmazoniaHack2026/
+├── api/
+│   ├── index.py                     # High-performance FastAPI serverless dashboard
+│   └── requirements.txt             # Lightweight 15MB Vercel dependencies
 ├── sc3_docaudit/
 │   ├── core/
 │   │   ├── schema.py                # Strict Pydantic models (schema.md)
@@ -133,19 +73,22 @@ AmazoniaHack2026/
 │   │   └── occurrences.db           # Local offline SQLite database
 │   └── tests/
 │       ├── test_adversarial_robustness.py # Adversarial image degradation tests
+│       ├── test_database_1_n.py     # Hierarchical 1:N database tests
 │       ├── test_epic1.py            # Image preprocessing unit tests
 │       ├── test_epic2.py            # Semantic entity extraction tests
 │       ├── test_epic3.py            # Uncertainty calibration tests
-│       └── test_epic4.py            # SC3 seal and reconciliation tests
-├── app.py                           # Occurrence-first Web Dashboard & Evidence Vault
+│       ├── test_epic4.py            # SC3 seal and reconciliation tests
+│       └── test_gps_parser.py       # Garmin & KML GPS parser tests
+├── app.py                           # Full Streamlit Web App & Evidence Vault
 ├── cli.py                           # Batch CLI processing tool
-├── requirements.txt                 # Lightweight dependencies
-└── README.md                        # Bilingual Documentation
+├── vercel.json                      # Vercel deployment routing configuration
+├── requirements.txt                 # Project dependencies
+└── README.md                        # Bilingual Master Documentation
 ```
 
 ---
 
-### 🛠️ Quickstart & Execution
+### 🛠️ Execution & Quickstart
 
 #### 1. Setup Environment
 ```bash
@@ -154,16 +97,22 @@ cd amazoniahackathon_s3c_docaudit
 pip install -r requirements.txt
 ```
 
-#### 2. Run Automated Test Suite
+#### 2. Run Automated Test Suite (17 Tests)
 ```bash
 pytest sc3_docaudit/tests/
 ```
+*Executes all 17 unit and integration tests covering OpenCV preprocessing, zero-shot entity extraction, confidence calibration, adversarial robustness, and SC3 Merkle seals.*
 
-#### 3. Launch Web Dashboard Locally
+#### 3. Launch Local Dashboard
 ```bash
 streamlit run app.py
 ```
-*Access `http://localhost:8501` to explore dossiers, inspect Merkle trees, and download `.sc3` forensic containers.*
+*Access `http://localhost:8501` to inspect occurrences, review deskewed documents, listen to field voice notes, and export `.sc3` cryptographic containers.*
+
+#### 4. Run Batch CLI Processing
+```bash
+python cli.py --input participant-package/challenges-1-2/altamira/documents/ --output results/
+```
 
 ---
 
@@ -173,22 +122,23 @@ streamlit run app.py
 
 ## Documentação em Português (PT-BR)
 
-### 🌐 Demonstração Online na Nuvem & Links Periciais
-- **App em Produção:** [amazoniahackathons3cdocaudit.streamlit.app](https://amazoniahackathons3cdocaudit-nmluix5bwjqrtjt4sfysv2.streamlit.app/)
-- **Exemplo de Link Direto para Laudos Periciais / PJe:** `https://amazoniahackathons3cdocaudit-nmluix5bwjqrtjt4sfysv2.streamlit.app/?dossie=OC-2026-ALT-01`
+### 📌 Visão Geral do Sistema & Resumo Executivo
+
+O **SC3 DocAudit** é uma plataforma *edge-native* de inteligência documental, extração pericial e cadeia de custódia criptográfica, projetada para operar **100% offline** nas condições mais severas da Floresta Amazônica.
+
+Ele resolve o maior gargalo da fiscalização ambiental brasileira: a anulação em massa de autos de infração e termos de embargo na Justiça devido a erros materiais de preenchimento manual, divergências de áreas/coordenadas e alegações de quebra na cadeia de custódia das provas.
+
+Adotando o paradigma **Centrado na Ocorrência**: cada operação fiscalizatória é tratada como um dossiê relacional (1:N) armazenado localmente em **SQLite**, conciliado e blindado pelo **Protocolo SC3** (*Selo Criptográfico de Cadeia de Custódia via Árvore de Merkle SHA-256*, em conformidade estrita com os **Arts. 158-A a 158-F do Código de Processo Penal** e o **Decreto Federal nº 6.514/2008**).
 
 ---
 
-### 📌 Resposta aos Critérios do Hackathon
+### 🎯 Conformidade Integral com os Desafios do Hackathon
 
-| Diretriz Oficial | Como o SC3 DocAudit Implementa |
+| Desafio Oficial | Como o SC3 DocAudit Implementa |
 | :--- | :--- |
-| **1. Construção de Ponta a Ponta** | Sistema 100% funcional: *Ingestão de Imagens ➔ Pré-processamento OpenCV ➔ Extração Semântica ➔ Calibração de Incerteza ➔ Conciliação Espaçotemporal ➔ Selagem Merkle ➔ Interface Web & Download do Container `.sc3`*. |
-| **2. Ingestão e Busca Ativa de Dados** | Todos os dossiês piloto estruturados (Altamira, Paragominas, Tailândia, Ulianópolis) + suporte a formatos GPS (Garmin GPX, Google KML, CSV e GMS) e conformidade com o Decreto Federal nº 6.514/2008. |
-| **3. Declaração Explícita de Incerteza** | Módulo `ConfidenceEvaluator`: pontuação de confiança de $0.0$ a $1.0$. Dados ilegíveis recebem `null` acompanhados de justificativa jurídica, eliminando alucinações. |
-| **4. Validação em Condições Adversas** | Testes de estresse com fotografias em baixa luminosidade, rotações acentuadas, sombras no capô de viaturas e ruído sonoro em áudios de campo. |
-| **5. Custo como Parte do Design** | **Custo Zero (R$ 0,00 / doc):** 100% offline no dispositivo. Sem necessidade de APIs comerciais caras de LLM, viabilizando uso por pequenas secretarias municipais do Pará. |
-| **6. Marco Bônus: Protocolo SC3** | **Cadeia de Custódia Inviolável:** Árvore de Merkle SHA-256 vinculando matematicamente autos físicos, fotografias georreferenciadas, áudios e trilhas GPS (Arts. 158-A a 158-F do CPP). |
+| **🌿 Challenge 1: Minuta do Relatório de Fiscalização** | Ingestiona e cruza as evidências de campo (`occurrence-summary.txt`, `field-notes.md`, `photos/`, `audios/`), calculando centróides, transcrevendo notas e gerando a minuta formal do Relatório Circunstanciado de Fiscalização. |
+| **📷 Challenge 2: Papel Fotografado para Dados Estruturados** | Motor de visão computacional agnóstico a layouts que processa os autos físicos de `documents/` e gera arquivos `.json` com o mesmo `basename` aderentes ao `schema.md`. Pontua incerteza de $0.0$ a $1.0$ e marca `null` em dados ilegíveis sem alucinar. |
+| **🛡️ Marco Bônus: Conciliação Espaçotemporal & Protocolo SC3** | Cruza o relatório de campo com os autos de papel, detectando divergências territoriais, discrepâncias de área autuada vs. CAR e divergências de titularidade. Gera a Raiz de Merkle inviolável e exporta o container forense `.sc3`. |
 
 ---
 
@@ -198,13 +148,13 @@ streamlit run app.py
 | :--- | :--- | :--- |
 | **Custo por Documento** | ~R$ 0,70 a R$ 2,00 (Chamadas de API) | **R$ 0,00** |
 | **Custo Anual (10.000 autos)** | ~R$ 14.000,00 a R$ 25.000,00 | **R$ 0,00** |
-| **Dependência de Internet** | Obrigatória (Inviável na mata fechada) | **100% Offline (Edge CPU)** |
+| **Dependência de Internet** | Obrigatória (Inviável na mata fechada) | **100% Offline (Edge CPU / PWA)** |
 | **Risco de Alucinação** | Alto (Divergências em CPFs e áreas) | **Zero (Extração determinística & explicável)** |
 | **Cadeia de Custódia Judicial** | Inexistente | **Árvore de Merkle (.sc3 inviolável)** |
 
 ---
 
-### 🛠️ Como Executar Localmente
+### 🛠️ Como Executar
 
 #### 1. Instalar Dependências
 ```bash
@@ -213,16 +163,20 @@ cd amazoniahackathon_s3c_docaudit
 pip install -r requirements.txt
 ```
 
-#### 2. Executar Testes Automatizados
+#### 2. Executar Suíte de Testes (17 Testes)
 ```bash
 pytest sc3_docaudit/tests/
 ```
 
-#### 3. Iniciar o Painel Web
+#### 3. Iniciar o Painel Web Local
 ```bash
 streamlit run app.py
 ```
-*Acesse `http://localhost:8501` para auditar os dossiês e exportar certidões periciais criptográficas.*
+
+#### 4. Executar Processamento em Lote via Linha de Comando (CLI)
+```bash
+python cli.py --input participant-package/challenges-1-2/altamira/documents/ --output results/
+```
 
 ---
 
