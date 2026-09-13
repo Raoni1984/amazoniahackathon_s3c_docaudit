@@ -349,29 +349,6 @@ def index_dashboard(dossie: Optional[str] = None):
       </div>
     </header>
 
-    <!-- KPIs -->
-    <section class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-title">Operações Auditadas</div>
-        <div class="kpi-value">{len(all_occs)}</div>
-        <div class="kpi-sub">Altamira, Paragominas, Tailândia...</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Autos Periciados</div>
-        <div class="kpi-value">{total_docs}</div>
-        <div class="kpi-sub">Constatações, Infrações e Embargos</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Cadeia de Custódia</div>
-        <div class="kpi-value" style="color:var(--primary);">Arts. 158 CPP</div>
-        <div class="kpi-sub">Árvore de Merkle SHA-256</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Custo por Documento</div>
-        <div class="kpi-value" style="color:var(--success);">R$ 0,00</div>
-        <div class="kpi-sub">Zero APIs em Nuvem (100% Offline)</div>
-      </div>
-    </section>
 
     <!-- Main Content Grid -->
     <div class="main-grid">
