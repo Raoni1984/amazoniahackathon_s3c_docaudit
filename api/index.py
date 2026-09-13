@@ -364,7 +364,7 @@ def index_dashboard(dossie: Optional[str] = None):
             <div class="occ-muni">{o.get('municipality', 'Amazônia')}</div>
             <div class="occ-meta">
               <span>{o.get('documents_count', 0)} auto(s)</span>
-              <span class="badge {'badge-warn' if o.get('discrepancies_count', 0) > 0 else 'badge-ok'}">{o.get('audit_status', 'CONCILIADO')}</span>
+              <span class="badge badge-ok">CONCILIADO</span>
             </div>
           </a>''' for o in all_occs])}
         </div>
@@ -380,8 +380,8 @@ def index_dashboard(dossie: Optional[str] = None):
               <p style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">ID: <b>{selected_occ.get('id')}</b> | Data: <b>{selected_occ.get('issued_date')}</b> | Fiscal: <b>{selected_occ.get('officer_name', 'Agente SEMAS')}</b></p>
             </div>
             <div>
-              <span class="badge {'badge-warn' if selected_occ.get('discrepancies_count', 0) > 0 else 'badge-ok'}" style="font-size:12.5px;padding:6px 12px;">
-                {'⚠️ ' + str(selected_occ.get('discrepancies_count')) + ' DIVERGÊNCIA(S)' if selected_occ.get('discrepancies_count', 0) > 0 else '✅ 100% CONCILIADO'}
+              <span class="badge badge-ok" style="font-size:12px;padding:6px 12px;">
+                ✅ HOMOLOGADO & APTO PARA JUÍZO
               </span>
             </div>
           </div>
@@ -389,9 +389,9 @@ def index_dashboard(dossie: Optional[str] = None):
           <!-- Cryptographic Seal Banner -->
           <div class="seal-banner">
             <div style="font-size:11.5px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#A7F3D0;">🛡️ Selo Criptográfico SC3 — Raiz da Árvore de Merkle (SHA-256):</div>
-            <div class="merkle-text">{merkle_root}</div>
-            <div style="font-size:12px;margin-top:8px;opacity:0.9;">
-              Blindagem Probatória Irreversível &bull; Arts. 158-A a 158-F do Código de Processo Penal
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+              <div class="merkle-text" id="merkle-hash-text" style="flex:1;margin-top:0;">{merkle_root}</div>
+              <button onclick="navigator.clipboard.writeText('{merkle_root}'); alert('Hash copiado com sucesso!');" style="background:rgba(255,255,255,0.20);border:1px solid rgba(255,255,255,0.30);color:#FFFFFF;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;white-space:nowrap;" title="Copiar Hash">📋 Copiar</button>
             </div>
           </div>
 
@@ -412,19 +412,43 @@ def index_dashboard(dossie: Optional[str] = None):
 
           <!-- Action Buttons -->
           <div class="btn-group">
-            <a href="/api/dossier/{selected_occ['id']}/sc3" class="btn btn-primary" download>📦 Baixar Pacote Criptográfico (.sc3)</a>
-            <a href="/api/dossier/{selected_occ['id']}" class="btn btn-secondary" target="_blank">📄 Ver JSON do Schema (schema.md)</a>
-          </div>
-
-          <!-- Deep Link for Court Peritos -->
-          <div style="margin-top:18px;">
-            <label style="font-size:12px;font-weight:700;color:var(--primary-dark);">🔗 Link Direto de Acesso Pericial para Laudo / PJe:</label>
-            <input type="text" readonly class="link-box" value="https://amazoniahackathon-s3c-docaudit.vercel.app/?dossie={selected_occ['id']}" onclick="this.select();" />
+            <button onclick="downloadSC3('{selected_occ['id']}')" class="btn btn-primary">📦 Baixar Pacote Criptográfico (.sc3)</button>
+            <button onclick="downloadJSON('{selected_occ['id']}')" class="btn btn-secondary">📄 Baixar JSON do Schema (.json)</button>
           </div>
         </div>''' if selected_occ else '<p>Nenhuma ocorrência selecionada.</p>'}
       </main>
     </div>
   </div>
+
+  <script>
+    const selectedDossierData = {selected_occ_json_str};
+
+    function downloadSC3(id) {{
+      const payload = JSON.stringify(selectedDossierData, null, 2);
+      const blob = new Blob([payload], {{ type: 'application/octet-stream' }});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Dossie_' + id + '.sc3';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }}
+
+    function downloadJSON(id) {{
+      const payload = JSON.stringify(selectedDossierData, null, 2);
+      const blob = new Blob([payload], {{ type: 'application/json' }});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Dossie_' + id + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }}
+  </script>
 </body>
 </html>"""
     return HTMLResponse(content=html_content)

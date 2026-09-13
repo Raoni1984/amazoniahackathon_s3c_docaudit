@@ -119,7 +119,7 @@ python cli.py --input participant-package/challenges-1-2/altamira/documents/ --o
 
 ---
 
-<p align="right"><a href="#️-sc3-docaudit">⬆️ Back to Top</a> &nbsp;|&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Ir para a Documentação em Português</a></p>
+<p align="right"><a href="#️-sc3-docaudit">⬆️ Back to Top</a> &nbsp;</a></p>
 
 ---
 
@@ -185,4 +185,4 @@ python cli.py --input participant-package/challenges-1-2/altamira/documents/ --o
 
 ---
 
-<p align="right"><a href="#️-sc3-docaudit">⬆️ Voltar ao Topo</a> &nbsp;|&nbsp; <a href="#english-documentation">🇺🇸 Go to English Documentation</a></p>
+<p align="right"><a href="#️-sc3-docaudit">⬆️ Voltar ao Topo</a> &nbsp;</p>
