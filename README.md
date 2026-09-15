@@ -1,6 +1,7 @@
 # 🛡️ SC3 DocAudit
 ### Intelligent Extraction, Uncertainty Calibration, and Cryptographic Chain of Custody for Environmental Enforcement in the Amazon
 
+[![Hackathon](https://img.shields.io/badge/Hackathon-AmazoniaHack%204.0-008060.svg)](https://amazoniahack.co/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Protocol](https://img.shields.io/badge/Protocol-SC3%20(Cryptographic%20Seal)-00f59b.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Database](https://img.shields.io/badge/Database-SQLite%20Offline%20Persistent-blue.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
@@ -14,7 +15,7 @@
 
 ## ⚖️ Legal & Forensic Disclaimer / Clause de Non-Responsabilité
 
-> **Academic & Experimental Software**: SC3 DocAudit was conceptualized during the AmazoniaHack 4.0 hackathon as an open-source technical prototype. 
+> **Academic & Experimental Software**: SC3 DocAudit was conceptualized during the [AmazoniaHack 4.0](https://amazoniahack.co/) hackathon as an open-source technical prototype. 
 > 
 > - **Human-in-the-Loop Requirement**: This software is designed strictly as an assistive triage and pre-auditing tool. It **does not replace** the legal authority, discretion, or official signature of sworn environmental enforcement officers (*Agentes Ambientais Federais/Estaduais*).
 > - **Zero Affiliation**: Unless explicitly contracted, this software does not constitute an official system of IBAMA, ICMBio, or state environmental secretariats (SEMA).
@@ -172,6 +173,13 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 
 ---
 
+### 🤝 Acknowledgments & Hackathon Organization
+
+We extend our sincere appreciation to the organizers and mentors of **AmazoniaHack 4.0** for establishing the benchmark datasets and challenges driving AI innovation for the preservation and sustainable enforcement of the Amazon biome.
+* **Official Hackathon Portal**: [https://amazoniahack.co/](https://amazoniahack.co/)
+
+---
+
 <p align="right"><a href="#️-sc3-docaudit">⬆️ Back to Top</a> &nbsp;</a></p>
 
 ---
@@ -180,7 +188,7 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 
 ### ⚖️ Aviso Legal & Forense
 
-> **Software Acadêmico e Experimental**: O SC3 DocAudit foi concebido durante o hackathon AmazoniaHack 4.0 como um protótipo técnico de código aberto.
+> **Software Acadêmico e Experimental**: O SC3 DocAudit foi concebido durante o hackathon [AmazoniaHack 4.0](https://amazoniahack.co/) como um protótipo técnico de código aberto.
 > 
 > - **Requisito de Intervenção Humana (*Human-in-the-Loop*)**: Este software foi projetado estritamente como uma ferramenta de triagem assistida e pré-auditoria. Ele **não substitui** a autoridade legal, a discricionariedade técnica ou a assinatura oficial de Agentes Ambientais Federais ou Estaduais.
 > - **Isenção de Vínculo Institucional**: Salvo quando expressamente contratado ou homologado, este software não constitui sistema oficial do IBAMA, ICMBio ou secretarias estaduais de meio ambiente (SEMA).
@@ -288,6 +296,13 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 #### 4. Reconciliação Forense e Provas Merkle (`sc3_docaudit/core/crypto_seal.py` e `reconciler.py`)
 * **Árvore de Merkle Binária (SHA-256)**: Amarra matematicamente as imagens originais, áudios, anotações e JSONs em um único Hash Raiz imutável de 64 caracteres.
 * **Distância de Levenshtein e Distância Geodésica de Haversine**: Utilizadas no `reconciler.py` para detecção de divergências entre logs de GPS de campo e autos de papel (ex.: divergência de área $> 10\%$, divergência de nomes de autuados).
+
+---
+
+### 🤝 Agradecimentos & Organização do Hackathon
+
+Nosso agradecimento especial a toda a equipe organizadora, mentores e banca avaliadora do **AmazoniaHack 4.0** pelo fomento a tecnologias de ponta e inteligência artificial aplicada à defesa e sustentabilidade do bioma amazônico.
+* **Portal Oficial do Evento**: [https://amazoniahack.co/](https://amazoniahack.co/)
 
 ---
 
