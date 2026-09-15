@@ -3,35 +3,65 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Environments
+# Environments & Virtual Envs
 .env
+.env.*
 .venv
 env/
 venv/
 ENV/
 
-# Distribution / packaging
+# Distribution & Build
 build/
 dist/
 *.egg-info/
 
-# Streamlit
+# Streamlit & Secrets
 .streamlit/secrets.toml
 .secrets*
 *.key
+*.pem
+*.cert
 
-# Participant package data (Rule 1 of Hackathon: do not redistribute sensitive data)
+# Database & SQLite files (Strict Privacy)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+occurrences.db
+sc3_docaudit/data/*.db
+
+# Real Field Evidence & Sensitive Media
 participant-package/
+data/raw/
+data/field_audio/
+data/field_photos/
+output/
+results/
+temp/
+*.sc3
+*.gpx
+*.kml
 
-# Pitch & Presentation notes
+# Pitch & Presentation internal notes
 PITCH.TXT
 pitch.txt
 *pitch*.txt
 
-# Outputs & DBs
-output/
-results/
-temp/
-*.db
-*.sqlite3
+# System & OS Files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test & Agent Caches
+.pytest_cache/
+.coverage
+htmlcov/
 .agents/

@@ -1,6 +1,7 @@
 # 🛡️ SC3 DocAudit
 ### Intelligent Extraction, Uncertainty Calibration, and Cryptographic Chain of Custody for Environmental Enforcement in the Amazon
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Protocol](https://img.shields.io/badge/Protocol-SC3%20(Cryptographic%20Seal)-00f59b.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Database](https://img.shields.io/badge/Database-SQLite%20Offline%20Persistent-blue.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Architecture](https://img.shields.io/badge/Architecture-Occurrence--First%20%7C%20Mobile--First-purple.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
@@ -8,6 +9,16 @@
 [![Privacy](https://img.shields.io/badge/LGPD-100%25%20Compliant%20by%20Design-0284c7.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Tests](https://img.shields.io/badge/Tests-17%2F17%20Passing-success.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel%20Serverless%20FastAPI-black.svg)](https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit)
+
+---
+
+## ⚖️ Legal & Forensic Disclaimer / Clause de Non-Responsabilité
+
+> **Academic & Experimental Software**: SC3 DocAudit was conceptualized during the AmazoniaHack 4.0 hackathon as an open-source technical prototype. 
+> 
+> - **Human-in-the-Loop Requirement**: This software is designed strictly as an assistive triage and pre-auditing tool. It **does not replace** the legal authority, discretion, or official signature of sworn environmental enforcement officers (*Agentes Ambientais Federais/Estaduais*).
+> - **Zero Affiliation**: Unless explicitly contracted, this software does not constitute an official system of IBAMA, ICMBio, or state environmental secretariats (SEMA).
+> - **Synthetic Testing**: All datasets, sample notices, and geographical coordinates packaged in this repository are synthetic mock representations generated for evaluation and stress-testing purposes.
 
 ---
 
@@ -166,6 +177,16 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 ---
 
 ## Documentação em Português (PT-BR)
+
+### ⚖️ Aviso Legal & Forense
+
+> **Software Acadêmico e Experimental**: O SC3 DocAudit foi concebido durante o hackathon AmazoniaHack 4.0 como um protótipo técnico de código aberto.
+> 
+> - **Requisito de Intervenção Humana (*Human-in-the-Loop*)**: Este software foi projetado estritamente como uma ferramenta de triagem assistida e pré-auditoria. Ele **não substitui** a autoridade legal, a discricionariedade técnica ou a assinatura oficial de Agentes Ambientais Federais ou Estaduais.
+> - **Isenção de Vínculo Institucional**: Salvo quando expressamente contratado ou homologado, este software não constitui sistema oficial do IBAMA, ICMBio ou secretarias estaduais de meio ambiente (SEMA).
+> - **Dados Sintéticos**: Todas as bases de dados, autos de infração de exemplo e coordenadas geográficas presentes neste repositório são dados sintéticos criados exclusivamente para fins de avaliação e testes de estresse.
+
+---
 
 ### 📌 Visão Geral do Sistema & Resumo Executivo
 
