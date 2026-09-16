@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SC3 DocAudit — Especificação Técnica & Motor Forense</title>
+    <meta name="description" content="Especificação técnica detalhada, algoritmos de visão computacional, calibração de incerteza, segurança criptográfica forense e roadmap do SC3 DocAudit.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #090d16;
+            --bg-card: rgba(18, 24, 38, 0.75);
+            --bg-card-hover: rgba(26, 35, 56, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(0, 245, 155, 0.3);
+            --emerald: #00f59b;
+            --emerald-glow: rgba(0, 245, 155, 0.2);
+            --teal: #0ea5e9;
+            --amber: #f59e0b;
+            --rose: #f43f5e;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 245, 155, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            background: rgba(9, 13, 22, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, var(--emerald), var(--teal));
+            color: #051410;
+            font-weight: 800;
+            font-size: 0.9rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 8px;
+            box-shadow: 0 0 16px var(--emerald-glow);
+        }
+
+        .logo-title {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--emerald);
+        }
+
+        .btn-github {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-github:hover {
+            border-color: var(--emerald);
+            box-shadow: 0 0 12px var(--emerald-glow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 6rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 245, 155, 0.1);
+            border: 1px solid var(--border-accent);
+            color: var(--emerald);
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 40%, var(--emerald) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            max-width: 780px;
+            margin: 0 auto 2rem;
+            color: var(--text-muted);
+            font-size: 1.15rem;
+        }
+
+        .badges-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .badge-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.85rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+        }
+
+        .badge-item span {
+            color: var(--emerald);
+            font-weight: 700;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--emerald-glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(0, 245, 155, 0.1);
+            border: 1px solid var(--border-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+        }
+
+        h2, h3 {
+            font-family: var(--font-heading);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 1.85rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: #ffffff;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        li::before {
+            content: "▹";
+            color: var(--emerald);
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #38bdf8;
+            overflow-x: auto;
+            margin: 1rem 0;
+            line-height: 1.5;
+        }
+
+        .formula-box {
+            background: rgba(0, 245, 155, 0.04);
+            border: 1px dashed var(--border-accent);
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--emerald);
+            margin: 1.25rem 0;
+        }
+
+        /* Interactive Forensics Simulator */
+        .interactive-panel {
+            background: rgba(14, 20, 32, 0.9);
+            border: 1px solid var(--border-accent);
+            border-radius: 16px;
+            padding: 2.25rem;
+            margin: 3.5rem 0;
+            box-shadow: 0 0 35px rgba(0, 245, 155, 0.08);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--emerald);
+        }
+
+        .merkle-tree-visual {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tree-node {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .tree-node.root {
+            border-color: var(--emerald);
+            background: rgba(0, 245, 155, 0.08);
+            color: var(--emerald);
+            font-weight: 700;
+        }
+
+        .tree-node.leaf {
+            border-color: var(--teal);
+            background: rgba(14, 165, 233, 0.06);
+            color: #7dd3fc;
+        }
+
+        /* Roadmap Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .checklist-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 245, 155, 0.2);
+        }
+
+        .checklist-status {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checklist-content h4 {
+            font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .checklist-content p {
+            margin-bottom: 0;
+            font-size: 0.85rem;
+        }
+
+        .tag-phase {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .phase-done { background: rgba(0, 245, 155, 0.15); color: var(--emerald); }
+        .phase-q1 { background: rgba(14, 165, 233, 0.15); color: var(--teal); }
+        .phase-q2 { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--emerald);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Slider Controls */
+        .slider-container {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .slider-input {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--emerald);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--emerald);
+        }
+
+        .score-display {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .score-pass {
+            background: rgba(0, 245, 155, 0.1);
+            border: 1px solid var(--emerald);
+            color: var(--emerald);
+        }
+
+        .score-null {
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px solid var(--rose);
+            color: var(--rose);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-area">
+                <span class="logo-badge">SC3 PROTOCOL</span>
+                <span class="logo-title">DocAudit Engine</span>
+            </a>
+            <div class="nav-links">
+                <a href="#vision" class="nav-link">Visão Computacional</a>
+                <a href="#confidence" class="nav-link">Calibração</a>
+                <a href="#crypto" class="nav-link">Criptografia CPP</a>
+                <a href="#simulator" class="nav-link">Simulador Merkle</a>
+                <a href="#roadmap" class="nav-link">Roadmap</a>
+                <a href="https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit" target="_blank" class="btn-github">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="hero">
+            <div class="hero-tag">
+                <span>⚡ AmazoniaHack 4.0 Technical Specification</span>
+            </div>
+            <h1>Especificação Técnica & Motor Forense</h1>
+            <p class="hero-desc">
+                Como o <strong>SC3 DocAudit</strong> transforma imagens de autos físicos e logs de GPS em provas periciais inalteráveis e matematicamente auditáveis nos Tribunais (Arts. 158-A a 158-F do CPP).
+            </p>
+            <div class="badges-bar">
+                <div class="badge-item">Arquitetura: <span>Occurrence-First (1:N)</span></div>
+                <div class="badge-item">Resistência de Colisão: <span>2²⁵⁶ (SHA-256)</span></div>
+                <div class="badge-item">Anti-Alucinação: <span>Score < 0.35 → null</span></div>
+                <div class="badge-item">Confiabilidade Testes: <span>17/17 Passing (100%)</span></div>
+            </div>
+        </div>
+
+        <!-- Seção 1: Visão Computacional -->
+        <div id="vision" class="card" style="margin-bottom: 2.5rem;">
+            <div class="card-header">
+                <div class="card-icon">👁️</div>
+                <div>
+                    <h2>1. Pipeline de Visão Computacional & Pré-Processamento</h2>
+                    <p style="margin: 0;">Módulo: <code>sc3_docaudit/core/image_preprocessing.py</code></p>
+                </div>
+            </div>
+            <p>
+                Em operações reais de fiscalização, os autos de infração são fotografados em pranchetas e suportes de campo em viaturas sob iluminação desuniforme da copa da floresta, com papel carbono desgastado e ângulos inclinados. O motor aplica uma esteira determinística de 4 estágios:
+            </p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Etapas Algorítmicas</h3>
+                    <ul>
+                        <li><strong>Retângulo de Área Mínima (cv2.minAreaRect)</strong>: Calcula os momentos da maior componente conexa do papel para estimar o ângulo de rotação ($\theta$) e aplica matrizes afins para retificação geométrica (<em>deskew</em>).</li>
+                        <li><strong>CLAHE (Equalização Adaptativa de Histograma)</strong>: Normaliza a distribuição de luminância em blocos locais ($8 \times 8$), eliminando sombras severas de árvores e dedos sem queimar o contraste do texto.</li>
+                        <li><strong>Binarização Adaptativa de Otsu & Gaussiana</strong>: Segmenta traços finos de papel carbono e impressoras matriciais antigas com limiarização dinâmica.</li>
+                        <li><strong>Filtro Bilateral</strong>: Suprime ruídos de sensor da câmera preservando estritamente as arestas vivas dos caracteres manuscritos.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Implementação Determinística</h3>
+                    <div class="code-block">
+# Pipeline determinístico sem perda de dados
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+denoised = cv2.bilateralFilter(gray, 9, 75, 75)
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+enhanced = clahe.apply(denoised)
+thresh = cv2.adaptiveThreshold(enhanced, 255, 
+    cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+    cv2.THRESH_BINARY, 11, 2)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 2: Calibração de Confiança -->
+        <div id="confidence" class="card" style="margin-bottom: 2.5rem;">
+            <div class="card-header">
+                <div class="card-icon">🎯</div>
+                <div>
+                    <h2>2. Calibração Multidimensional & Política Anti-Alucinação</h2>
+                    <p style="margin: 0;">Módulo: <code>sc3_docaudit/core/confidence_evaluator.py</code></p>
+                </div>
+            </div>
+            <p>
+                Diferente de modelos puramente generativos que inventam dados plausíveis quando encontram trechos ilegíveis, o SC3 DocAudit implementa <strong>calibração estocástica estrita</strong>. Se a evidência é ilegível, o campo é explicitamente marcado como <code>null</code>.
+            </p>
+
+            <div class="formula-box">
+                Confidence(x) = min(1.0, max(0.0, 0.45 · P_OCR + 0.35 · V_Syntax + 0.20 · A_Spatial))
+            </div>
+
+            <div class="grid-3">
+                <div class="card" style="padding: 1.25rem;">
+                    <h3>P_OCR (45%)</h3>
+                    <p>Probabilidade bayesiana das caixas delimitadoras da rede neural EasyOCR/CRNN.</p>
+                </div>
+                <div class="card" style="padding: 1.25rem;">
+                    <h3>V_Syntax (35%)</h3>
+                    <p>Validação por máscaras RegEx (ex.: CAR <code>PA-1500602-...</code> pontua $0.95$, datas válidas pontuam $0.90$).</p>
+                </div>
+                <div class="card" style="padding: 1.25rem;">
+                    <h3>A_Spatial (20%)</h3>
+                    <p>Consistência geográfica dentro da Amazônia Legal (Lat: -15° a +5°, Lon: -74° a -44°).</p>
+                </div>
+            </div>
+
+            <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid var(--rose); border-radius: 10px; padding: 1rem 1.5rem;">
+                <strong style="color: var(--rose);">🛡️ Regra de Ouro (Zero-Hallucination Threshold):</strong>
+                <p style="margin: 0.25rem 0 0; font-size: 0.9rem;">
+                    Se $\text{Confidence} < 0.35$, o extrator aborta a predição, grava <code>null</code> e aciona o flag de intervenção humana (<em>Human-in-the-Loop</em>).
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção 3: Simulador Interativo de Calibração -->
+        <div class="interactive-panel">
+            <div class="panel-title">
+                <span>🎛️</span>
+                <h3>Simulador Interativo de Anti-Alucinação</h3>
+            </div>
+            <p>Ajuste os fatores abaixo para testar a decisão em tempo real do motor de calibração:</p>
+
+            <div class="slider-container">
+                <div>
+                    <label class="input-label">P_OCR (Probabilidade Bayesiana do OCR)</label>
+                    <input type="range" min="0" max="100" value="75" class="slider-input" id="ocrSlider" oninput="updateConfidenceSim()">
+                </div>
+                <span id="ocrVal" style="font-family: var(--font-mono); font-weight: 700; color: var(--emerald);">0.75</span>
+            </div>
+
+            <div class="slider-container">
+                <div>
+                    <label class="input-label">V_Syntax (Validação de Máscara / Sintaxe)</label>
+                    <input type="range" min="0" max="100" value="90" class="slider-input" id="syntaxSlider" oninput="updateConfidenceSim()">
+                </div>
+                <span id="syntaxVal" style="font-family: var(--font-mono); font-weight: 700; color: var(--emerald);">0.90</span>
+            </div>
+
+            <div class="slider-container">
+                <div>
+                    <label class="input-label">A_Spatial (Consistência Territorial Amazônica)</label>
+                    <input type="range" min="0" max="100" value="80" class="slider-input" id="spatialSlider" oninput="updateConfidenceSim()">
+                </div>
+                <span id="spatialVal" style="font-family: var(--font-mono); font-weight: 700; color: var(--emerald);">0.80</span>
+            </div>
+
+            <div id="scoreBox" class="score-display score-pass">
+                Score Calculado: <span id="finalScore">0.81</span> — <span id="verdict">CAMPO EXTRAÍDO COM SUCESSO</span>
+            </div>
+        </div>
+
+        <!-- Seção 4: Segurança Criptográfica & Arts. 158-A/F CPP -->
+        <div id="crypto" class="card" style="margin-bottom: 2.5rem;">
+            <div class="card-header">
+                <div class="card-icon">🛡️</div>
+                <div>
+                    <h2>3. Cadeia de Custódia Criptográfica & Validade Forense (CPP)</h2>
+                    <p style="margin: 0;">Módulos: <code>sc3_docaudit/core/crypto_seal.py</code> & <code>reconciler.py</code></p>
+                </div>
+            </div>
+            <p>
+                A quebra na cadeia de custódia é o principal argumento jurídico para anulação de autos ambientais. O <strong>Protocolo SC3</strong> implementa o "Lacre Matemático" que atende diretamente aos requisitos da Lei nº 13.964/2019 (Pacote Anticrime):
+            </p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Conformidade Estrita com o CPP</h3>
+                    <ul>
+                        <li><strong>Art. 158-A (Definição de Cadeia de Custódia)</strong>: Rastreia a história cronológica de todas as folhas físicas, fotos georreferenciadas e áudios de campo.</li>
+                        <li><strong>Art. 158-B (Etapas de Fixação e Acondicionamento)</strong>: No momento da apreensão, o hash SHA-256 é calculado localmente no dispositivo e imutabilizado na SQLite.</li>
+                        <li><strong>Princípio da "Mesmidade da Prova" (STJ)</strong>: O Tribunal ou Perito Judicial pode rodar <code>sha256sum</code> ou <code>certutil</code> no terminal e confirmar que o arquivo apresentado em juízo é bit-a-bit idêntico ao coletado na floresta.</li>
+                        <li><strong>Resistência de Colisão ($2^{256}$)</strong>: Seriam necessários mais computadores do que átomos no universo observável rodando por bilhões de anos para forjar uma colisão SHA-256.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Árvore de Merkle Binária</h3>
+                    <div class="code-block">
+                  [ Merkle Root Hash ]
+                           /      \
+            [ H(Doc + Metadados) ]  [ H(Fotos + Áudios) ]
+                 /            \           /          \
+            H(Auto.jpg)    H(JSON)   H(Audio.mp3)  H(GPS.gpx)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 5: Simulador de Árvore de Merkle em JS -->
+        <div id="simulator" class="interactive-panel">
+            <div class="panel-title">
+                <span>🌳</span>
+                <h3>Simulador Forense de Árvore de Merkle (SHA-256 em Tempo Real)</h3>
+            </div>
+            <p>Edite os dados de campo abaixo para ver o cálculo da Raiz de Merkle acontecer ao vivo usando a Web Cryptography API do seu navegador:</p>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label class="input-label">Folha de Evidência 1 (Auto de Infração)</label>
+                    <input type="text" id="leaf1" class="input-field" value="AUTO-INFRACAO-1049-NOVO-PROGRESSO-PA" oninput="calculateLiveMerkle()">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Folha de Evidência 2 (Extrato JSON Estruturado)</label>
+                    <input type="text" id="leaf2" class="input-field" value="AREA_HA:145.2;VALOR_MULTA:350000.00;CAR:PA-1500602" oninput="calculateLiveMerkle()">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Folha de Evidência 3 (Foto de Campo / Metadados EXIF)</label>
+                    <input type="text" id="leaf3" class="input-field" value="LAT:-07.1245;LON:-55.4312;TIMESTAMP:2026-09-15T14:30:00Z" oninput="calculateLiveMerkle()">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Folha de Evidência 4 (Gravação de Voz do Fiscal)</label>
+                    <input type="text" id="leaf4" class="input-field" value="AUDIO_NOTE:Desmatamento recente constatado na coordenada 07 Sul" oninput="calculateLiveMerkle()">
+                </div>
+            </div>
+
+            <div class="merkle-tree-visual">
+                <div class="input-label" style="color: var(--emerald);">🌿 Raiz de Merkle Criptografada (Lacre SC3):</div>
+                <div id="rootNode" class="tree-node root">Calculando...</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
+                    <div>
+                        <div class="input-label" style="color: var(--teal);">Nó Intermediário H(1,2):</div>
+                        <div id="node12" class="tree-node leaf">...</div>
+                    </div>
+                    <div>
+                        <div class="input-label" style="color: var(--teal);">Nó Intermediário H(3,4):</div>
+                        <div id="node34" class="tree-node leaf">...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 6: Roadmap & Features Checklist -->
+        <div id="roadmap" class="card">
+            <div class="card-header">
+                <div class="card-icon">🚀</div>
+                <div>
+                    <h2>4. Checklist de Próximas Features & Roadmap Aberto</h2>
+                    <p style="margin: 0;">Perspectivas de evolução para a comunidade Open Source</p>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checklist-status">✅</div>
+                <div class="checklist-content">
+                    <h4>Motor de Extração Offline & Calibração de Incerteza <span class="tag-phase phase-done">Concluído (Hackathon 4.0)</span></h4>
+                    <p>Extração agnóstica a layouts com binarização adaptativa, deskew automático e calibração multidimensional contra alucinações.</p>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checklist-status">✅</div>
+                <div class="checklist-content">
+                    <h4>Cadeia de Custódia SC3 com Árvore de Merkle SHA-256 <span class="tag-phase phase-done">Concluído (Hackathon 4.0)</span></h4>
+                    <p>Amarração probatória de imagens, áudios e JSONs com exportação em container autônomo <code>.sc3</code> e auditoria 100% via terminal.</p>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checklist-status">🔄</div>
+                <div class="checklist-content">
+                    <h4>Assinatura Digital dos Agentes via Chaves Ed25519 / ICP-Brasil <span class="tag-phase phase-q1">Q4 2026</span></h4>
+                    <p>Incorporar pares de chaves assimétricas criptográficas diretamente no hardware do fiscal para aposição de fé pública digital sobre a Raiz de Merkle.</p>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checklist-status">🔄</div>
+                <div class="checklist-content">
+                    <h4>Detector de Documentos Leve com YOLOv8-Nano On-Device <span class="tag-phase phase-q1">Q4 2026</span></h4>
+                    <p>Segmentação automática das bordas do papel em tempo real na tela do celular antes do disparo fotográfico, eliminando 100% do ruído de fundo.</p>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checklist-status">⏳</div>
+                <div class="checklist-content">
+                    <h4>RAG Jurídico Offline para Enquadramento do Decreto 6.514/2008 <span class="tag-phase phase-q2">Q1 2027</span></h4>
+                    <p>Base vetorial SQLite embarcada com toda a legislação ambiental brasileira para sugestão automática dos artigos infringidos com base no relato de campo.</p>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checklist-status">⏳</div>
+                <div class="checklist-content">
+                    <h4>Sincronização P2P Wi-Fi Direct em Malha (Mesh) entre Fiscais <span class="tag-phase phase-q2">Q1 2027</span></h4>
+                    <p>Permitir que diferentes equipes em campo troquem dossiês e boletins de ocorrência diretamente via rádio/Wi-Fi sem depender de nenhuma torre central.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="https://amazoniahack.co/" target="_blank">Portal Oficial AmazoniaHack 4.0</a>
+            <span>•</span>
+            <a href="https://opensource.guide/" target="_blank">Guia Open Source (GitHub)</a>
+            <span>•</span>
+            <a href="https://github.com/Raoni1984/amazoniahackathon_s3c_docaudit" target="_blank">Repositório GitHub</a>
+        </div>
+        <p>SC3 DocAudit — Protocolo de Cadeia de Custódia e Inteligência Documental para a Amazônia.</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #64748b;">Distribuído sob licença Apache 2.0. Em conformidade com os Arts. 158-A a 158-F do Código de Processo Penal Brasileiro.</p>
+    </footer>
+
+    <script>
+        // SHA-256 via Web Crypto API
+        async function sha256(str) {
+            const buffer = new TextEncoder().encode(str);
+            const digest = await crypto.subtle.digest('SHA-256', buffer);
+            return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function calculateLiveMerkle() {
+            const l1 = document.getElementById('leaf1').value || ' ';
+            const l2 = document.getElementById('leaf2').value || ' ';
+            const l3 = document.getElementById('leaf3').value || ' ';
+            const l4 = document.getElementById('leaf4').value || ' ';
+
+            const h1 = await sha256(l1);
+            const h2 = await sha256(l2);
+            const h3 = await sha256(l3);
+            const h4 = await sha256(l4);
+
+            const h12 = await sha256(h1 + h2);
+            const h34 = await sha256(h3 + h4);
+            const root = await sha256(h12 + h34);
+
+            document.getElementById('node12').textContent = h12;
+            document.getElementById('node34').textContent = h34;
+            document.getElementById('rootNode').textContent = root;
+        }
+
+        function updateConfidenceSim() {
+            const ocr = parseFloat(document.getElementById('ocrSlider').value) / 100;
+            const syntax = parseFloat(document.getElementById('syntaxSlider').value) / 100;
+            const spatial = parseFloat(document.getElementById('spatialSlider').value) / 100;
+
+            document.getElementById('ocrVal').textContent = ocr.toFixed(2);
+            document.getElementById('syntaxVal').textContent = syntax.toFixed(2);
+            document.getElementById('spatialVal').textContent = spatial.toFixed(2);
+
+            const score = (0.45 * ocr) + (0.35 * syntax) + (0.20 * spatial);
+            const finalScore = Math.min(1.0, Math.max(0.0, score));
+
+            document.getElementById('finalScore').textContent = finalScore.toFixed(3);
+
+            const scoreBox = document.getElementById('scoreBox');
+            const verdict = document.getElementById('verdict');
+
+            if (finalScore >= 0.35) {
+                scoreBox.className = "score-display score-pass";
+                verdict.textContent = "CAMPO EXTRAÍDO COM SUCESSO (CONFIÁVEL)";
+            } else {
+                scoreBox.className = "score-display score-null";
+                verdict.textContent = "ABORTADO: SCORE < 0.35 → ATRIBUÍDO NULL (ANTI-ALUCINAÇÃO)";
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            calculateLiveMerkle();
+            updateConfidenceSim();
+        });
+    </script>
+</body>
+</html>

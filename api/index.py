@@ -82,6 +82,22 @@ def download_sc3_container(occ_id: str):
     )
 
 
+@app.get("/saiba-mais", response_class=HTMLResponse)
+@app.get("/docs-tech", response_class=HTMLResponse)
+@app.get("/technical-spec", response_class=HTMLResponse)
+@app.get("/api/saiba-mais", response_class=HTMLResponse)
+def technical_spec_page():
+    spec_path = os.path.join(PARENT_DIR, "docs", "technical_spec.html")
+    if os.path.exists(spec_path):
+        with open(spec_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read(), status_code=200)
+    alt_path = os.path.join(CURRENT_DIR, "..", "docs", "technical_spec.html")
+    if os.path.exists(alt_path):
+        with open(alt_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read(), status_code=200)
+    return HTMLResponse("<h1>Documentação Técnica não encontrada</h1>", status_code=404)
+
+
 @app.get("/", response_class=HTMLResponse)
 @app.get("/api", response_class=HTMLResponse)
 @app.get("/api/index", response_class=HTMLResponse)
@@ -344,6 +360,11 @@ def index_dashboard(dossie: Optional[str] = None):
       <div>
         <h1>🛡️ SC3 DocAudit</h1>
         <p>Selo Criptográfico de Cadeia de Custódia &bull; Auditoria Documental Forense <span class="version-tag">Versão 1.2.4 &bull; 13/09/2026</span></p>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <a href="/saiba-mais" target="_blank" style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.4); color: #FFFFFF; text-decoration: none; padding: 7px 14px; border-radius: 6px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+          📘 Saiba Mais (Documentação Técnica)
+        </a>
       </div>
     </header>
 

@@ -24,7 +24,7 @@
 ---
 
 <div align="center">
-  <h3>🌐 <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português</a> &nbsp;•&nbsp; <a href="docs/under_the_hood.html">🧠 Interactive Deep-Dive (Por Baixo do Capô)</a></h3>
+  <h3>🌐 <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português</a> &nbsp;•&nbsp; <a href="docs/technical_spec.html">📘 Documentação Técnica Detalhada (Saiba Mais)</a></h3>
 </div>
 
 ---
@@ -184,7 +184,7 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 | ⏳ | **Offline Legal Statutes RAG (Decreto Federal nº 6.514/2008)** | Q1 2027 | Embedded vector store in SQLite to automatically match legal infractions. |
 | ⏳ | **P2P Mesh Synchronization (Wi-Fi Direct) between Patrols** | Q1 2027 | Peer-to-peer dossier replication across remote field vehicles without internet. |
 
-> 🔬 **Interactive Deep-Dive**: Explore the live interactive Merkle Tree calculator and uncertainty calibration simulator in [`docs/under_the_hood.html`](docs/under_the_hood.html).
+> 🔬 **Interactive Technical Documentation**: Explore the live interactive Merkle Tree calculator and uncertainty calibration simulator in [`docs/technical_spec.html`](docs/technical_spec.html) or on the Vercel app at `/saiba-mais`.
 
 ---
 
@@ -331,7 +331,7 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 | ⏳ | **RAG Jurídico Offline do Decreto Federal nº 6.514/2008** | Q1 2027 | Base vetorial SQLite sugerindo artigos legais violados conforme a narrativa. |
 | ⏳ | **Sincronização P2P Mesh (Wi-Fi Direct) entre Viaturas** | Q1 2027 | Replicação de boletins de ocorrência entre agentes em campo sem internet. |
 
-> 🔬 **Página Interativa**: Abra a ferramenta interativa [`docs/under_the_hood.html`](docs/under_the_hood.html) no navegador para testar o calculador ao vivo da Árvore de Merkle e o simulador de calibração de confiança.
+> 🔬 **Página Interativa**: Acesse a especificação técnica interativa em [`docs/technical_spec.html`](docs/technical_spec.html) ou diretamente no portal web Vercel através da rota `/saiba-mais` para testar o calculador ao vivo da Árvore de Merkle e o simulador de calibração de confiança.
 
 ---
 
