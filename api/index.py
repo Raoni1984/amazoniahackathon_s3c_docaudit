@@ -16,11 +16,19 @@ PARENT_DIR = os.path.dirname(CURRENT_DIR)
 if PARENT_DIR not in sys.path:
     sys.path.insert(0, PARENT_DIR)
 
-from fastapi import FastAPI, Response, HTTPException
+from fastapi import FastAPI, Response, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from sc3_docaudit.core.database import OccurrenceDatabase
 from sc3_docaudit.core.crypto_seal import CryptoSealSC3
+
+try:
+    from api.tech_spec_html import TECH_SPEC_HTML
+except ImportError:
+    try:
+        from tech_spec_html import TECH_SPEC_HTML
+    except ImportError:
+        TECH_SPEC_HTML = ""
 
 app = FastAPI(
     title="SC3 DocAudit API",
@@ -83,15 +91,20 @@ def download_sc3_container(occ_id: str):
 
 
 @app.get("/saiba-mais", response_class=HTMLResponse)
+@app.get("/saiba-mais/", response_class=HTMLResponse)
 @app.get("/docs-tech", response_class=HTMLResponse)
 @app.get("/technical-spec", response_class=HTMLResponse)
 @app.get("/api/saiba-mais", response_class=HTMLResponse)
+@app.get("/api/docs-tech", response_class=HTMLResponse)
+@app.get("/api/technical-spec", response_class=HTMLResponse)
 def technical_spec_page():
+    if TECH_SPEC_HTML:
+        return HTMLResponse(content=TECH_SPEC_HTML, status_code=200)
     spec_path = os.path.join(PARENT_DIR, "docs", "technical_spec.html")
     if os.path.exists(spec_path):
         with open(spec_path, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read(), status_code=200)
-    alt_path = os.path.join(CURRENT_DIR, "..", "docs", "technical_spec.html")
+    alt_path = os.path.join(CURRENT_DIR, "technical_spec.html")
     if os.path.exists(alt_path):
         with open(alt_path, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read(), status_code=200)
@@ -102,7 +115,25 @@ def technical_spec_page():
 @app.get("/api", response_class=HTMLResponse)
 @app.get("/api/index", response_class=HTMLResponse)
 @app.get("/api/index.py", response_class=HTMLResponse)
-def index_dashboard(dossie: Optional[str] = None):
+def index_dashboard(request: Request, dossie: Optional[str] = None, page: Optional[str] = None, view: Optional[str] = None):
+    # Intercept Vercel rewrite paths for saiba-mais / tech spec
+    req_path = str(request.url.path).lower()
+    raw_headers = {k.lower(): v.lower() for k, v in request.headers.items()}
+    matched_path = raw_headers.get("x-matched-path", "")
+    invoke_path = raw_headers.get("x-invoke-path", "")
+    forwarded_uri = raw_headers.get("x-forwarded-uri", "")
+    
+    is_tech_spec = (
+        page in ["saiba-mais", "tech", "docs", "especificacao"] or
+        view in ["saiba-mais", "tech", "docs", "especificacao"] or
+        "saiba-mais" in req_path or "technical-spec" in req_path or "docs-tech" in req_path or
+        "saiba-mais" in matched_path or "technical-spec" in matched_path or
+        "saiba-mais" in invoke_path or "technical-spec" in invoke_path or
+        "saiba-mais" in forwarded_uri or "technical-spec" in forwarded_uri
+    )
+    if is_tech_spec:
+        return technical_spec_page()
+
     all_occs = OccurrenceDatabase.get_all_occurrences()
     selected_id = dossie if (dossie and any(o["id"] == dossie for o in all_occs)) else (all_occs[0]["id"] if all_occs else "")
     selected_occ = OccurrenceDatabase.get_occurrence_by_id(selected_id) if selected_id else None
