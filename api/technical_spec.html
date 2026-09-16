@@ -438,10 +438,10 @@
         </div>
         
         <p class="txt-pt">
-            Em fiscalizações ambientais na Amazônia, a unidade fundamental de prova não é um documento isolado, mas a <strong>Ocorrência Fiscalizatória ($O$)</strong>. O modelo relacional estrutura cada operação como uma tupla contendo $n$ peças físicas e $m$ evidências multimodais coletadas em campo:
+            Em fiscalizações ambientais na Amazônia, a unidade fundamental de prova não é um documento isolado, mas a <strong>Ocorrência Fiscalizatória (<em>O</em>)</strong>. O modelo relacional estrutura cada operação como uma tupla contendo <em>n</em> peças físicas e <em>m</em> evidências multimodais coletadas em campo:
         </p>
         <p class="txt-en" style="display:none;">
-            In remote environmental inspections, the fundamental unit of evidentiary value is not an isolated sheet of paper, but the <strong>Enforcement Occurrence ($O$)</strong>. The relational model formalizes each inspection as a discrete tuple composed of $n$ physical documents and $m$ multimodal sensor assets:
+            In remote environmental inspections, the fundamental unit of evidentiary value is not an isolated sheet of paper, but the <strong>Enforcement Occurrence (<em>O</em>)</strong>. The relational model formalizes each inspection as a discrete tuple composed of <em>n</em> physical documents and <em>m</em> multimodal sensor assets:
         </p>
 
         <div class="math-box">
@@ -553,10 +553,10 @@ binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv
         </div>
 
         <p class="txt-pt">
-            Onde os coeficientes foram parametrizados empiricamente: $w_1 = 0.45$ (evidência óptica neural), $w_2 = 0.35$ (validação de formato sintático oficial), e $w_3 = 0.20$ (pertencimento ao retângulo envolvente da Amazônia Legal).
+            Onde os coeficientes foram parametrizados empiricamente: <em>w₁ = 0.45</em> (evidência óptica neural), <em>w₂ = 0.35</em> (validação de formato sintático oficial), e <em>w₃ = 0.20</em> (pertencimento ao retângulo envolvente da Amazônia Legal).
         </p>
         <p class="txt-en" style="display:none;">
-            Where weights are empirically calibrated: $w_1 = 0.45$ (neural optical score), $w_2 = 0.35$ (syntactic regex mask), and $w_3 = 0.20$ (geographical consistency inside the Legal Amazon bounding box).
+            Where weights are empirically calibrated: <em>w₁ = 0.45</em> (neural optical score), <em>w₂ = 0.35</em> (syntactic regex mask), and <em>w₃ = 0.20</em> (geographical consistency inside the Legal Amazon bounding box).
         </p>
 
         <!-- Interactive Simulator -->
@@ -617,8 +617,8 @@ binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv
             <div>
                 <h3><span class="txt-pt">Propriedades Criptográficas do SHA-256</span><span class="txt-en" style="display:none;">Cryptographic Properties of SHA-256</span></h3>
                 <ul>
-                    <li><span class="txt-pt"><strong>Resistência à Pré-Imagem</strong>: Dado um hash $h$, é computacionalmente inviável encontrar $m$ tal que $H(m) = h$ ($O(2^{256})$).</span><span class="txt-en" style="display:none;"><strong>Pre-image Resistance</strong>: Computationally infeasible to reverse a digest $h$ back to input $m$ ($O(2^{256})$).</span></li>
-                    <li><span class="txt-pt"><strong>Resistência à Colisão</strong>: Inviável encontrar dois arquivos distintos $m_1 \neq m_2$ com $H(m_1) = H(m_2)$ ($O(2^{128})$ operações pelo Paradoxo do Aniversário).</span><span class="txt-en" style="display:none;"><strong>Collision Resistance</strong>: Infeasible to find $m_1 \neq m_2$ yielding $H(m_1) = H(m_2)$ ($O(2^{128})$ operations).</span></li>
+                    <li><span class="txt-pt"><strong>Resistência à Pré-Imagem</strong>: Dado um hash <em>h</em>, é computacionalmente inviável encontrar <em>m</em> tal que <em>H(m) = h</em> (<em>O(2²⁵⁶)</em>).</span><span class="txt-en" style="display:none;"><strong>Pre-image Resistance</strong>: Computationally infeasible to reverse a digest <em>h</em> back to input <em>m</em> (<em>O(2²⁵⁶)</em>).</span></li>
+                    <li><span class="txt-pt"><strong>Resistência à Colisão</strong>: Inviável encontrar dois arquivos distintos <em>m₁ ≠ m₂</em> com <em>H(m₁) = H(m₂)</em> (complexidade <em>O(2¹²⁸)</em> operações pelo Paradoxo do Aniversário).</span><span class="txt-en" style="display:none;"><strong>Collision Resistance</strong>: Infeasible to find <em>m₁ ≠ m₂</em> yielding <em>H(m₁) = H(m₂)</em> (complexity <em>O(2¹²⁸)</em> operations).</span></li>
                     <li><span class="txt-pt"><strong>Efeito Avalanche</strong>: A alteração de um único bit em uma coordenada ou número de CPF altera irreversivelmente 50% dos bits do Hash Raiz.</span><span class="txt-en" style="display:none;"><strong>Strict Avalanche Effect</strong>: Flipping a single bit in a coordinate or tax ID changes over 50% of the Root Hash bits.</span></li>
                 </ul>
             </div>
@@ -698,7 +698,7 @@ certutil -hashfile Dossie_OC-2026-ALT-01.sc3 SHA256
                     <td><strong>Motor de Extração Offline & Calibração</strong></td>
                     <td>v1.2 (Entregue)</td>
                     <td><span class="status-badge status-done">Concluído</span></td>
-                    <td>Visão computacional (CLAHE, Deskew) e calibração multidimensional ($\tau = 0.35$).</td>
+                    <td>Visão computacional (CLAHE, Deskew) e calibração multidimensional (τ = 0.35).</td>
                 </tr>
                 <tr>
                     <td><strong>Protocolo SC3 (Árvore de Merkle SHA-256)</strong></td>
