@@ -491,11 +491,18 @@
             </div>
         </div>
 
+        <div class="math-box">
+            <span class="txt-pt"><strong>Limiar Adaptativo Gaussiano:</strong> T(x, y) = [ Σ G(i, j) · I(x+i, y+j) ] - C</span>
+            <span class="txt-en" style="display:none;"><strong>Adaptive Gaussian Threshold:</strong> T(x, y) = [ Σ G(i, j) · I(x+i, y+j) ] - C</span>
+        </div>
+
         <div class="code-box">
-# Expressão de Binarização Gaussiana Adaptativa:
-# T(x, y) = [ (1/W) * sum(G(i, j) * I(x+i, y+j)) ] - C
+<span class="txt-pt"># Pipeline de Pré-processamento em Python (OpenCV):
 enhanced = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8)).apply(denoised)
-binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)</span>
+<span class="txt-en" style="display:none;"># Image Preprocessing Pipeline in Python (OpenCV):
+enhanced = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8)).apply(denoised)
+binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)</span>
         </div>
     </div>
 
