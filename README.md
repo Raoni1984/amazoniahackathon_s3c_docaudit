@@ -13,13 +13,15 @@
 
 ---
 
-## ⚖️ Legal & Forensic Disclaimer / Clause de Non-Responsabilité
+## ⚖️ Legal, Forensic & Intellectual Integrity Disclaimer
 
 > **Academic & Experimental Software**: SC3 DocAudit was conceptualized during the [AmazoniaHack 4.0](https://amazoniahack.co/) hackathon as an open-source technical prototype. 
 > 
 > - **Human-in-the-Loop Requirement**: This software is designed strictly as an assistive triage and pre-auditing tool. It **does not replace** the legal authority, discretion, or official signature of sworn environmental enforcement officers (*Agentes Ambientais Federais/Estaduais*).
 > - **Zero Affiliation**: Unless explicitly contracted, this software does not constitute an official system of IBAMA, ICMBio, or state environmental secretariats (SEMA).
 > - **Synthetic Testing**: All datasets, sample notices, and geographical coordinates packaged in this repository are synthetic mock representations generated for evaluation and stress-testing purposes.
+> - **Code Provenance & Intellectual Integrity**: All code in this repository is original work engineered specifically for the AmazoniaHack 4.0 challenges using standard AI-assisted pair programming workflows. Mathematical and algorithmic components (CLAHE, Bilateral Filter, Gaussian Adaptive Binarization, Haversine formula, Levenshtein Distance, and Merkle Trees) are established, public-domain scientific principles implemented via standard open-source libraries (OpenCV, Pydantic, FastAPI, Streamlit, SQLite) under permissive licenses.
+> - **Open Source Licensing (Apache 2.0)**: This repository is distributed under the Apache 2.0 license. Anyone is free to inspect, study, adapt, and build upon this code provided proper author attribution and license notices are preserved.
 
 ---
 
@@ -221,13 +223,15 @@ We extend our sincere appreciation to the organizers and mentors of **AmazoniaHa
 
 ## Documentação em Português (PT-BR)
 
-### ⚖️ Aviso Legal & Forense
+### ⚖️ Aviso Legal, Integridade Intelectual e Licenciamento
 
 > **Software Acadêmico e Experimental**: O SC3 DocAudit foi concebido durante o hackathon [AmazoniaHack 4.0](https://amazoniahack.co/) como um protótipo técnico de código aberto.
 > 
 > - **Requisito de Intervenção Humana (*Human-in-the-Loop*)**: Este software foi projetado estritamente como uma ferramenta de triagem assistida e pré-auditoria. Ele **não substitui** a autoridade legal, a discricionariedade técnica ou a assinatura oficial de Agentes Ambientais Federais ou Estaduais.
 > - **Isenção de Vínculo Institucional**: Salvo quando expressamente contratado ou homologado, este software não constitui sistema oficial do IBAMA, ICMBio ou secretarias estaduais de meio ambiente (SEMA).
 > - **Dados Sintéticos**: Todas as bases de dados, autos de infração de exemplo e coordenadas geográficas presentes neste repositório são dados sintéticos criados exclusivamente para fins de avaliação e testes de estresse.
+> - **Origem do Código e Integridade Intelectual**: Todo o código desta plataforma é autoral, desenvolvido especificamente para os desafios do AmazoniaHack 4.0 com auxílio de fluxos de *pair programming* com IA. As formulações matemáticas e algoritmos empregados (CLAHE, Filtro Bilateral, Binarização Adaptativa, Fórmula de Haversine, Distância de Levenshtein e Árvore de Merkle) são fundamentos científicos consolidados e de domínio público, construídos sobre bibliotecas de código aberto permissivas (OpenCV, Pydantic, FastAPI, Streamlit, SQLite).
+> - **Licenciamento Open Source (Apache 2.0)**: O projeto é distribuído sob a Licença Apache 2.0, garantindo liberdade para auditoria, estudo e uso comunitário, com preservação dos créditos e autoria original.
 
 ---
 
