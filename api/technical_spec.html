@@ -445,7 +445,8 @@
         </p>
 
         <div class="math-box">
-            O = \Big( \text{ID}_{\text{occ}}, \; \{D_1, D_2, \dots, D_n\}, \; E_{\text{photos}}, \; E_{\text{audio}}, \; G_{\text{gps}}, \; R_{\text{merkle}} \Big)
+            <span class="txt-pt">Ocorrência = ( ID_occ, { D₁, D₂, ..., Dₙ }, Evidências_Fotos, Áudios_Voz, Logs_GPS, Raiz_Merkle )</span>
+            <span class="txt-en" style="display:none;">Occurrence = ( ID_occ, { D₁, D₂, ..., Dₙ }, Photo_Assets, Voice_Dictations, GPS_Logs, Merkle_Root )</span>
         </div>
 
         <p class="txt-pt">
@@ -471,28 +472,28 @@
         </div>
 
         <p class="txt-pt">
-            Documentos fotografados sob a copa da floresta sofrem com rotações de plano ($\theta$), sombras oclusivas e traços fracos de papel carbono. O módulo <code>sc3_docaudit/core/image_preprocessing.py</code> executa uma esteira em quatro etapas:
+            Documentos fotografados sob a copa da floresta sofrem com rotações de plano (θ), sombras oclusivas e traços fracos de papel carbono. O módulo <code>sc3_docaudit/core/image_preprocessing.py</code> executa uma esteira em quatro etapas:
         </p>
         <p class="txt-en" style="display:none;">
-            Notices photographed in rainforest conditions suffer from planar rotation ($\theta$), tree canopy cast shadows, and weathered carbon copies. The <code>image_preprocessing.py</code> module applies a 4-stage deterministic pipeline:
+            Notices photographed in rainforest conditions suffer from planar rotation (θ), tree canopy cast shadows, and weathered carbon copies. The <code>image_preprocessing.py</code> module applies a 4-stage deterministic pipeline:
         </p>
 
         <div class="grid-2">
             <div>
                 <h3><span class="txt-pt">1. Retificação de Inclinação (Deskew)</span><span class="txt-en" style="display:none;">1. Orientation & Deskewing</span></h3>
-                <p class="txt-pt">Calcula os momentos estatísticos centrais $\mu_{20}, \mu_{02}, \mu_{11}$ do contorno de maior área via <code>cv2.minAreaRect</code> para determinar o ângulo principal de orientação $\theta$. Aplica-se a matriz de transformação afim de rotação $M(\theta)$ para restaurar o alinhamento horizontal dos caracteres antes da extração OCR.</p>
-                <p class="txt-en" style="display:none;">Calculates central geometric moments $\mu_{20}, \mu_{02}, \mu_{11}$ of the largest connected contour via <code>cv2.minAreaRect</code> to estimate principal angle $\theta$. Applies an affine transformation matrix $M(\theta)$ to enforce horizontal baseline alignment prior to OCR parsing.</p>
+                <p class="txt-pt">Calcula os momentos estatísticos centrais μ₂₀, μ₀₂, μ₁₁ do contorno de maior área via <code>cv2.minAreaRect</code> para determinar o ângulo principal de orientação θ. Aplica-se a matriz de transformação afim de rotação M(θ) para restaurar o alinhamento horizontal dos caracteres antes da extração OCR.</p>
+                <p class="txt-en" style="display:none;">Calculates central geometric moments μ₂₀, μ₀₂, μ₁₁ of the largest connected contour via <code>cv2.minAreaRect</code> to estimate principal angle θ. Applies an affine transformation matrix M(θ) to enforce horizontal baseline alignment prior to OCR parsing.</p>
             </div>
             <div>
                 <h3><span class="txt-pt">2. Equalização Local de Contraste (CLAHE)</span><span class="txt-en" style="display:none;">2. Local Contrast Equalization (CLAHE)</span></h3>
-                <p class="txt-pt">Diferente da equalização global que queima áreas claras, o CLAHE atua sobre sub-blocos discretos de $8 \times 8$ pixels com limite de corte (*Clip Limit*) $\beta = 2.0$, redistribuindo o gradiente de luminância sem amplificar o ruído térmico do sensor.</p>
-                <p class="txt-en" style="display:none;">Unlike global histogram equalization which saturates highlights, CLAHE divides the grayscale image into contextual $8 \times 8$ tiles with a clipping threshold $\beta = 2.0$, evening out lighting without over-amplifying background sensor noise.</p>
+                <p class="txt-pt">Diferente da equalização global que queima áreas claras, o CLAHE atua sobre sub-blocos discretos de 8 × 8 pixels com limite de corte (Clip Limit) β = 2.0, redistribuindo o gradiente de luminância sem amplificar o ruído térmico do sensor.</p>
+                <p class="txt-en" style="display:none;">Unlike global histogram equalization which saturates highlights, CLAHE divides the grayscale image into contextual 8 × 8 tiles with a clipping threshold β = 2.0, evening out lighting without over-amplifying background sensor noise.</p>
             </div>
         </div>
 
         <div class="code-box">
 # Expressão de Binarização Gaussiana Adaptativa:
-# T(x, y) = [ (1/W) * \sum_{i,j \in \Omega} G(i, j) * I(x+i, y+j) ] - C
+# T(x, y) = [ (1/W) * sum(G(i, j) * I(x+i, y+j)) ] - C
 enhanced = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8)).apply(denoised)
 binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
         </div>
@@ -509,10 +510,10 @@ binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv
         </div>
 
         <p class="txt-pt">
-            O reconhecimento de caracteres utiliza redes neurais convolucionais-recorrentes (CRNN) com função de perda <em>Connectionist Temporal Classification (CTC)</em>, gerando caixas delimitadoras e probabilidades bayesianas $P_{\text{OCR}} \in [0.0, 1.0]$.
+            O reconhecimento de caracteres utiliza redes neurais convolucionais-recorrentes (CRNN) com função de perda <em>Connectionist Temporal Classification (CTC)</em>, gerando caixas delimitadoras e probabilidades bayesianas P_OCR ∈ [0.0, 1.0].
         </p>
         <p class="txt-en" style="display:none;">
-            Character recognition is powered by a Deep Convolutional Recurrent Neural Network (CRNN) with Connectionist Temporal Classification (CTC) loss, producing bounding boxes with native Bayesian probabilities $P_{\text{OCR}} \in [0.0, 1.0]$.
+            Character recognition is powered by a Deep Convolutional Recurrent Neural Network (CRNN) with Connectionist Temporal Classification (CTC) loss, producing bounding boxes with native Bayesian probabilities P_OCR ∈ [0.0, 1.0].
         </p>
         <p class="txt-pt">
             Para estruturar o texto em campos jurídicos conforme o <code>schema.md</code>, o motor aplica <strong>Autômatos Finitos Determinísticos (DFA)</strong> com âncoras léxicas estritas para identificar autuados, CPFs/CNPJs, códigos do CAR, enquadramentos legais (<em>Lei Federal nº 9.605/1998</em> e <em>Decreto Federal nº 6.514/2008</em>) e valores de multa em reais.
@@ -533,14 +534,15 @@ binary = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv
         </div>
 
         <p class="txt-pt">
-            A pontuação de incerteza do SC3 DocAudit é governada por uma função linear convexa delimitada no intervalo $[0.0, 1.0]$:
+            A pontuação de incerteza do SC3 DocAudit é governada por uma função linear convexa delimitada no intervalo [0.0, 1.0]:
         </p>
         <p class="txt-en" style="display:none;">
-            The uncertainty calibration score is computed via a bounded convex linear combination in $[0.0, 1.0]$:
+            The uncertainty calibration score is computed via a bounded convex linear combination in [0.0, 1.0]:
         </p>
 
         <div class="math-box">
-            \text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OCR}} + w_2 \cdot V_{\text{Syntax}} + w_3 \cdot A_{\text{Spatial}}\big)\Big)
+            <span class="txt-pt">Confiança(x) = min( 1.0, max( 0.0, 0.45 · P_OCR + 0.35 · V_Sintaxe + 0.20 · A_Espacial ) )</span>
+            <span class="txt-en" style="display:none;">Confidence(x) = min( 1.0, max( 0.0, 0.45 · P_OCR + 0.35 · V_Syntax + 0.20 · A_Spatial ) )</span>
         </div>
 
         <p class="txt-pt">
