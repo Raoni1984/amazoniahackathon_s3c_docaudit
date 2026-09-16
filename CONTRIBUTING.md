@@ -29,3 +29,6 @@ Thank you for your interest in contributing! We welcome contributions to edge ma
    - Add unit tests under `sc3_docaudit/tests/` for any new logic.
 
 5. Submit a Pull Request (*demande de tirage*) with a clear description of changes and technical trade-offs.
+
+## Open Source Guidelines & Standards
+For best practices regarding contributing to open source, pull requests etiquette, and community building, please consult the official [Open Source Guide](https://opensource.guide/).

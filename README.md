@@ -24,7 +24,7 @@
 ---
 
 <div align="center">
-  <h3>🌐 <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português (PT-BR)</a></h3>
+  <h3>🌐 <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português</a> &nbsp;•&nbsp; <a href="docs/under_the_hood.html">🧠 Interactive Deep-Dive (Por Baixo do Capô)</a></h3>
 </div>
 
 ---
@@ -167,11 +167,29 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 * **$A_{\text{Spatial}}$ (Geographic Bounding Box Consistency)**: Coordinates located inside the Legal Amazon bounding box (Lat $-15^\circ$ to $+5^\circ$, Lon $-74^\circ$ to $-44^\circ$) receive positive spatial reinforcement.
 * **Anti-Hallucination Threshold**: When composite confidence falls below the reliability threshold ($< 0.35$), the field is explicitly output as `null` with low confidence, adhering strictly to `schema.md` zero-hallucination rules.
 
-#### 4. Cryptographic Reconciliation & Merkle Proofs (`sc3_docaudit/core/crypto_seal.py` & `reconciler.py`)
-* **Binary Merkle Tree Construction (SHA-256)**: Computes deterministic leaf hashes from physical images, audio notes, field text, and extracted JSONs, creating a single immutable 64-character Root Hash.
-* **Levenshtein Distance & Haversine Geodesic Distance**: Used in `reconciler.py` to cross-audit differences between field GPS points and paper notices (e.g. area $> 10\%$ discrepancy, party name differences).
+#### 4. Cryptographic Chain of Custody & Forensic Security Proofs (`sc3_docaudit/core/crypto_seal.py` & `reconciler.py`)
+* **Binary Merkle Tree (SHA-256)**: Rather than signing a volatile database, the SC3 Protocol constructs a deterministic binary Merkle Tree from byte-level leaves (raw document image, extracted JSON, audio dictation, and GPS coordinates).
+* **Collision Resistance ($2^{256}$)**: The probability of finding two distinct files producing the identical SHA-256 digest is $1 \text{ in } 2^{256} \approx 1.15 \times 10^{77}$ (exceeding the estimated number of atoms in the observable universe).
+* **The Avalanche Effect**: Any modification to a single coordinate, character, or pixel irreversibly invalidates the Root Hash.
+* **Compliance with Arts. 158-A to 158-F of the Brazilian Criminal Procedure Code (CPP)**: Satisfies the legal requirement of *mesmidade da prova* (proof integrity) established by the Brazilian Superior Court of Justice (STJ).
+
+#### 5. 🗺️ Feature Roadmap & Perspectives Checklist
+
+| Status | Feature / Milestone | Target | Description & Impact |
+| :---: | :--- | :---: | :--- |
+| ✅ | **Offline Neural Extraction & Multi-Factor Calibration** | v1.2 (Done) | Layout-agnostic document extraction with anti-hallucination threshold. |
+| ✅ | **SC3 Forensic Seal (SHA-256 Merkle Tree Proofs)** | v1.2 (Done) | Immutable chain of custody with court-verifiable `.sc3` container export. |
+| 🔄 | **Officer Digital Signatures via Ed25519 / ICP-Brasil** | Q4 2026 | Asymmetric hardware key pairs allowing officers to digitally sign Root Hashes. |
+| 🔄 | **YOLOv8-Nano On-Device Document Boundary Detector** | Q4 2026 | Real-time camera viewfinder document auto-cropping before capture. |
+| ⏳ | **Offline Legal Statutes RAG (Decreto Federal nº 6.514/2008)** | Q1 2027 | Embedded vector store in SQLite to automatically match legal infractions. |
+| ⏳ | **P2P Mesh Synchronization (Wi-Fi Direct) between Patrols** | Q1 2027 | Peer-to-peer dossier replication across remote field vehicles without internet. |
+
+> 🔬 **Interactive Deep-Dive**: Explore the live interactive Merkle Tree calculator and uncertainty calibration simulator in [`docs/under_the_hood.html`](docs/under_the_hood.html).
 
 ---
+
+### 🌐 Open Source Community & Contributing
+We welcome contributions to computer vision, edge machine learning, and forensic evidence engineering. Please read our [`CONTRIBUTING.md`](CONTRIBUTING.md) and review the official [Open Source Guide](https://opensource.guide/) for collaboration standards.
 
 ### 🤝 Acknowledgments & Hackathon Organization
 
@@ -293,11 +311,32 @@ $$\text{Confidence}(x) = \min\Big(1.0, \; \max\big(0.0, \; w_1 \cdot P_{\text{OC
 * **$A_{\text{Espacial}}$ (Consistência Territorial)**: Coordenadas geográficas situadas dentro dos limites da Amazônia Legal (Lat $-15^\circ$ a $+5^\circ$, Long $-74^\circ$ a $-44^\circ$) recebem reforço positivo.
 * **Política de Anti-Alucinação**: Quando a confiança combinada for inferior ao limiar mínimo de confiabilidade ($< 0.35$), o campo é explicitamente marcado como `null` com confiança condizente, cumprindo 100% a diretriz de não-alucinação do `schema.md`.
 
-#### 4. Reconciliação Forense e Provas Merkle (`sc3_docaudit/core/crypto_seal.py` e `reconciler.py`)
-* **Árvore de Merkle Binária (SHA-256)**: Amarra matematicamente as imagens originais, áudios, anotações e JSONs em um único Hash Raiz imutável de 64 caracteres.
-* **Distância de Levenshtein e Distância Geodésica de Haversine**: Utilizadas no `reconciler.py` para detecção de divergências entre logs de GPS de campo e autos de papel (ex.: divergência de área $> 10\%$, divergência de nomes de autuados).
+#### 4. Segurança Criptográfica do Selo SC3 e Validade Jurídica nos Tribunais (`sc3_docaudit/core/crypto_seal.py` e `reconciler.py`)
+* **Árvore de Merkle Binária Determinística (SHA-256)**: Amarra matematicamente as imagens originais, gravações de áudio, anotações de campo e JSONs extraídos em um único Hash Raiz imutável de 64 caracteres.
+* **Resistência a Colisões ($2^{256}$)**: O espaço de estados do SHA-256 ($1{,}15 \times 10^{77}$ combinações) torna matematicamente impossível a forja de duas evidências distintas com o mesmo hash.
+* **Efeito Avalanche**: A alteração de um único bit em uma coordenada ou número de CPF altera irreversivelmente o Hash Raiz, denunciando imediatamente qualquer tentativa de fraude processual.
+* **Conformidade com os Arts. 158-A a 158-F do CPP (Lei nº 13.964/2019 - Pacote Anticrime)**:
+  * **Fixação e Acondicionamento (Art. 158-B)**: As provas digitais e físicas são lacradas matematicamente no momento da apreensão pelo fiscal em campo.
+  * **Princípio da "Mesmidade da Prova" (Jurisprudência do STJ)**: O Ministério Público, Juízes e Peritos Judiciais podem auditar de forma autônoma a integridade do arquivo `.sc3` via `sha256sum` ou `certutil`.
+* **Reconciliação Espaçotemporal**: Aplica a **Fórmula de Haversine** para auditar a distância geodésica entre o ponto do GPS e as coordenadas declaradas no auto de papel, e a **Distância de Levenshtein** para conciliar divergências ortográficas em nomes de autuados.
+
+#### 5. 🗺️ Checklist de Próximas Funcionalidades (Roadmap Aberto)
+
+| Status | Funcionalidade / Marco | Previsão | Descrição & Impacto Técnico |
+| :---: | :--- | :---: | :--- |
+| ✅ | **Extração Neural Offline & Calibração Multidimensional** | v1.2 (Pronto) | Extração agnóstica a layouts com limiar anti-alucinação ($< 0.35$). |
+| ✅ | **Selo Criptográfico SC3 (Árvore de Merkle SHA-256)** | v1.2 (Pronto) | Cadeia de custódia inalterável e exportação `.sc3` auditável no terminal. |
+| 🔄 | **Assinatura Digital dos Fiscais via Ed25519 / ICP-Brasil** | Q4 2026 | Pares de chaves assimétricas para conferir fé pública digital à Raiz de Merkle. |
+| 🔄 | **Detector de Bordas YOLOv8-Nano On-Device** | Q4 2026 | Auto-crop de formulários na câmera do smartphone em tempo real. |
+| ⏳ | **RAG Jurídico Offline do Decreto Federal nº 6.514/2008** | Q1 2027 | Base vetorial SQLite sugerindo artigos legais violados conforme a narrativa. |
+| ⏳ | **Sincronização P2P Mesh (Wi-Fi Direct) entre Viaturas** | Q1 2027 | Replicação de boletins de ocorrência entre agentes em campo sem internet. |
+
+> 🔬 **Página Interativa**: Abra a ferramenta interativa [`docs/under_the_hood.html`](docs/under_the_hood.html) no navegador para testar o calculador ao vivo da Árvore de Merkle e o simulador de calibração de confiança.
 
 ---
+
+### 🌐 Comunidade Open Source & Contribuições
+Contribuições são muito bem-vindas em visão computacional, aprendizado de máquina na borda e engenharia forense. Consulte nosso [`CONTRIBUTING.md`](CONTRIBUTING.md) e o [Guia Open Source Oficial](https://opensource.guide/) para padrões de colaboração.
 
 ### 🤝 Agradecimentos & Organização do Hackathon
 
