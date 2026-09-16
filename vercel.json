@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    { "source": "/saiba-mais", "destination": "/api/index.py?page=saiba-mais" },
+    { "source": "/docs-tech", "destination": "/api/index.py?page=saiba-mais" },
+    { "source": "/technical-spec", "destination": "/api/index.py?page=saiba-mais" },
+    { "source": "/api/saiba-mais", "destination": "/api/index.py?page=saiba-mais" },
     { "source": "/api/(.*)", "destination": "/api/index.py" },
     { "source": "/(.*)", "destination": "/api/index.py" }
   ]
