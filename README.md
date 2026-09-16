@@ -24,7 +24,7 @@
 ---
 
 <div align="center">
-  <h3>🌐 <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português</a> &nbsp;•&nbsp; <a href="https://amazoniahackathons3cdocaudit.vercel.app/saiba-mais">📘 Documentação Técnica Detalhada</a></h3>
+  <h3>🌐 <a href="#english-documentation">🇺🇸 English Documentation</a> &nbsp;•&nbsp; <a href="#documentação-em-português-pt-br">🇧🇷 Documentação em Português</a> &nbsp;•&nbsp; <a href="https://amazoniahackathons3cdocaudit.vercel.app/saiba-mais">📘 Documentação Técnica</a> &nbsp;•&nbsp; <a href="notebooks/tutorial_pipeline_ia_e_criptografia.ipynb">🧪 Tutorial Jupyter (IA + Cripto)</a></h3>
 </div>
 
 ---
@@ -93,6 +93,9 @@ AmazoniaHack2026/
 │       ├── test_epic3.py            # Uncertainty calibration tests
 │       ├── test_epic4.py            # SC3 seal and reconciliation tests
 │       └── test_gps_parser.py       # Garmin & KML GPS parser tests
+├── notebooks/
+│   └── tutorial_pipeline_ia_e_criptografia.ipynb # 🧪 Standalone Interactive AI & Crypto Tutorial
+├── sample_docs/                     # High-resolution synthetic field notices
 ├── app.py                           # Full Streamlit Web App & Evidence Vault
 ├── cli.py                           # Batch CLI processing tool
 ├── vercel.json                      # Vercel deployment routing configuration
@@ -100,6 +103,20 @@ AmazoniaHack2026/
 ├── requirements-dev.txt             # Full local development dependencies
 └── README.md                        # Bilingual Master Documentation
 ```
+
+---
+
+### 🧪 Interactive Deep-Dive: AI, Computer Vision & Cryptography Tutorial
+
+Want to inspect each algorithmic step under the hood? A standalone, didactic Jupyter Notebook is available:
+- 👉 **[`notebooks/tutorial_pipeline_ia_e_criptografia.ipynb`](notebooks/tutorial_pipeline_ia_e_criptografia.ipynb)**
+
+It includes step-by-step runnable code with Matplotlib visualizations and proofs:
+1. **Digital Image Processing (PDI)**: Bilateral filter, CLAHE contrast equalization, Adaptive Gaussian Binarization, and Deskewing moments.
+2. **Deterministic Regex DFA**: Extracting CAR, CPF with Modulo 11 check digit validation, and monetary fines.
+3. **Uncertainty Calibration**: Token entropy penalties and anti-hallucination thresholding ($\tau = 0.35$).
+4. **Geodesic Haversine Cross-Check**: $O(1)$ spherical distance validation against CAR polygons.
+5. **SC3 Cryptographic Chain of Custody**: SHA-256 Merkle Tree construction, live Avalanche Effect tamper demonstration, and $O(\log N)$ Merkle Inclusion Proofs.
 
 ---
 
@@ -245,6 +262,21 @@ Adotando o paradigma **Centrado na Ocorrência**: cada operação fiscalizatóri
 | **🌿 Challenge 1: Minuta do Relatório de Fiscalização** | Ingestiona e cruza as evidências de campo (`occurrence-summary.txt`, `field-notes.md`, `photos/`, `audios/`), calculando centróides, transcrevendo notas e gerando a minuta formal do Relatório Circunstanciado de Fiscalização. |
 | **📷 Challenge 2: Papel Fotografado para Dados Estruturados** | Motor de visão computacional agnóstico a layouts que processa os autos físicos de `documents/` e gera arquivos `.json` com o mesmo `basename` aderentes ao `schema.md`. Pontua incerteza de $0.0$ a $1.0$ e marca `null` em dados ilegíveis sem alucinar. |
 | **🛡️ Marco Bônus: Conciliação Espaçotemporal & Protocolo SC3** | Cruza o relatório de campo com os autos de papel, detectando divergências territoriais, discrepâncias de área autuada vs. CAR e divergências de titularidade. Gera a Raiz de Merkle inviolável e exporta o container forense `.sc3`. |
+
+---
+
+### 🧪 Tutorial Interativo Didático: Pipeline de IA e Criptografia Forense (Jupyter Notebook)
+
+Para peritos, pesquisadores ou desenvolvedores que desejam entender **passo a passo de forma reproduzível** a matemática e o código por trás da visão computacional, da extração semântica e da cadeia de custódia criptográfica, disponibilizamos um notebook interativo completo:
+
+- 👉 **[`notebooks/tutorial_pipeline_ia_e_criptografia.ipynb`](notebooks/tutorial_pipeline_ia_e_criptografia.ipynb)**
+
+#### Conteúdo Abordado no Notebook:
+1. **Processamento Digital de Imagens (PDI)**: Filtro Bilateral, equalização adaptativa de contraste (CLAHE), binarização adaptativa gaussiana e deskewing com plots comparativos.
+2. **Autômato Finito Determinístico (Regex DFA)**: Extração de CAR, CPF com validação algorítmica de dígitos verificadores (Módulo 11) e enquadramentos legais.
+3. **Calibração de Incerteza & Anti-Alucinação**: Penalização por entropia e rejeição estrita para campos abaixo do limiar $\tau = 0.35$.
+4. **Validação Geodésica de Haversine**: Cálculo em $O(1)$ da distância entre auto de infração e bases públicas do CAR.
+5. **Protocolo Criptográfico SC3 (Arts. 158-A a 158-F do CPP)**: Construção da Árvore de Merkle com SHA-256, **demonstração prática do Efeito Avalanche** (onde 1 caractere alterado altera 50% dos bits da raiz) e prova matemática de inclusão (*Merkle Audit Proof*).
 
 ---
 
